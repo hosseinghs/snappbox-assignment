@@ -1,10 +1,11 @@
-import axios, { AxiosError } from 'axios';
-import { getRefreshToken } from '@/auth'
+import axios, { AxiosError } from "axios";
+import { getRefreshToken } from "@/auth";
+import { getGlobalNotifyHandler } from "@/context/NotifyContext";
 
 // Create an Axios instance
 const apiCaller = axios.create({
   baseURL: '/api',
-  timeout: 30000, 
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -24,7 +25,12 @@ apiCaller.interceptors.request.use(
 
 apiCaller.interceptors.response.use(
   (response) => response,
-  async (error: AxiosError) => {
+  (error: AxiosError) => {
+    const showError = getGlobalNotifyHandler();
+    const message =
+      error.message ||
+      "Something went wrong. Please try again later.";
+    showError(message);
     return Promise.reject(error);
   }
 );
