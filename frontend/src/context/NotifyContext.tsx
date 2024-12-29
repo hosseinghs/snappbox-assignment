@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useEffect, useContext, useState, ReactNode } from "react";
+import React, { createContext, useEffect, useContext, useState, ReactNode, FC } from "react";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 
@@ -22,7 +22,7 @@ export const useNotify = (): NotifyContextType => {
   return context;
 };
 
-export const NotifyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const NotifyProvider: FC = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -42,7 +42,6 @@ export const NotifyProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   return (
     <NotifyContext.Provider value={{ showNotif }}>
-      {children}
       <Snackbar
         open={open}
         onClose={handleClose}

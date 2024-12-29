@@ -29,7 +29,7 @@ export default function RootLayout({
         <main>
           {children}
         </main>
-        <NotifyProvider >{children}</NotifyProvider >
+        <NotifyProvider/>
       </body>
     </html>
   );
