@@ -1,5 +1,5 @@
 import apiCaller from "@/axios";
-import type { IRegisterRequest, IVerifyRequest } from './register-request'
+import type { ILogin, IRegisterRequest, IVerifyRequest, ILoginResponse } from './register-request'
 
 const BASE_SCOPE_URL = '/auth'
 
@@ -15,6 +15,6 @@ export const verifyOTPCodeAPI = async (payload: IVerifyRequest) => {
     return await apiCaller.post(`${BASE_SCOPE_URL}/verify`, payload) 
 } 
 
-export const loginAPI = async (payload: IRegisterRequest) => {
+export const loginAPI = async (payload: ILogin): Promise<{ data: ILoginResponse }> => {
     return await apiCaller.post(`${BASE_SCOPE_URL}/login`, payload) 
 } 
