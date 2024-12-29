@@ -4,22 +4,26 @@ import Button from '@mui/material/Button';
 
 interface CodeInputComponentProps {
   length?: number;
-  onResendClick: () => void
+  onSubmit: (otp: string) => void;
+  onResendClick: () => void;
 };
 
-const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 5, onResendClick }) => {
+const TIMER = 10;
+
+const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 4, onResendClick, onSubmit }) => {
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
-  const [timer, setTimer] = useState(3);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [timer, setTimer] = useState(TIMER);
+  const [otp, setOtp] = useState<string>('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
 
     if (!/\d/.test(value) && value !== '') return;
 
-    if (inputsRef.current[index]) inputsRef.current[index]!.value = value;
+    const updatedOtp = otp.split('');
+    updatedOtp[index] = value;
+    setOtp(updatedOtp.join(''));
 
-    // Move to the next input if the current input is filled
     if (value && index < length - 1) inputsRef.current[index + 1]?.focus();
   };
 
@@ -45,10 +49,7 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 5, onR
   };
 
   useEffect(() => {
-    if (timer === 0) {
-      setIsDisabled(true);
-      return;
-    }
+    if (timer === 0) return;
 
     const interval = setInterval(() => {
       if (timer > 0) setTimer((prev) => prev - 1);
@@ -58,10 +59,13 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 5, onR
   }, [timer]);
 
   const handleResetTimer = () => {
-    setTimer(3); 
-    setIsDisabled(false);
-    if (onResendClick) onResendClick()
+    setTimer(TIMER);
+    if (onResendClick) onResendClick();
   };
+
+  useEffect(() => {
+    if (otp.length === length) onSubmit(otp);
+  }, [otp]);
 
   return (
     <div>
@@ -73,7 +77,6 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 5, onR
             type="text"
             maxLength={1}
             style={{ width: '40px', height: '40px', textAlign: 'center', fontSize: '20px' }}
-            disabled={isDisabled}
             onPaste={handlePaste}
             onChange={(e) => handleInputChange(e, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
@@ -82,10 +85,8 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 5, onR
       </div>
 
       <div>
-        {timer > 0 ? (
+        {timer > 0 && (
           <p>Time remaining: {Math.floor(timer / 60)}:{String(timer % 60).padStart(2, '0')}</p>
-        ) : (
-          <p>New OTP?</p>
         )}
       </div>
 
@@ -93,6 +94,13 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 5, onR
         <Button onClick={handleResetTimer}>Request New OTP</Button>
       )}
 
+      <Button
+        variant='contained'
+        disabled={length !== otp.length}
+        onClick={() => onSubmit(otp)}
+      >
+        Submit OTP
+      </Button>
     </div>
   );
 };
