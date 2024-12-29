@@ -9,5 +9,5 @@ export const setAccessToken = (token: string): void => {
   });
 };
 
-export const getRefreshToken = (): string | undefined => Cookies.get('access_token');
+export const getAccessToken = (): string | undefined => Cookies.get('access_token');
 export const removeRefreshToken = (): void => Cookies.remove('access_token')

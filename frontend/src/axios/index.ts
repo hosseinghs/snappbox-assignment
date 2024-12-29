@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { getRefreshToken } from "@/auth";
+import { getAccessToken } from "@/auth";
 import { getGlobalNotifyHandler } from "@/context/NotifyContext";
 
 // Create an Axios instance
@@ -14,7 +14,7 @@ const apiCaller = axios.create({
 
 apiCaller.interceptors.request.use(
   (config) => {
-    const accessToken = getRefreshToken();
+    const accessToken = getAccessToken();
     if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
   },
