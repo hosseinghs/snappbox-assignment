@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 
 import FirstStepRegister from "@/components/auth/register/FirstStep";
 import SecondStepRegister from "@/components/auth/register/SecondStep";
-import { sendUserInfoAPI, resendOTPCodeAPI, verifyOTPCodeAPI } from '@/services/auth/request'
+import { sendUserInfoAPI, resendOTPCodeAPI, verifyOTPCodeAPI } from '@/services/auth'
 
 enum RegisterSteps {
   REGISTER = 1,

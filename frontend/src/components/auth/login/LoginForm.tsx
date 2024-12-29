@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { loginAPI } from '@/services/auth/request';
+import { loginAPI } from '@/services/auth';
 import { setAccessToken } from '@/auth';
 
 export default function LoginForm() {
