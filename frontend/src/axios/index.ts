@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { getRefreshToken } from '@/auth'
 
 // Create an Axios instance
-const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:3000', // Use environment variables for the base URL
+const apiCaller = axios.create({
+  baseURL: '/api',
   timeout: 30000, 
   headers: {
     'Content-Type': 'application/json',
@@ -11,24 +11,22 @@ const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor
-axiosInstance.interceptors.request.use(
+apiCaller.interceptors.request.use(
   (config) => {
     const accessToken = getRefreshToken();
     if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
   },
-  (error) => {
+  (error: AxiosError) => {
     return Promise.reject(error);
   }
 );
 
-// Response interceptor
-axiosInstance.interceptors.response.use(
+apiCaller.interceptors.response.use(
   (response) => response,
-  async (error) => {
+  async (error: AxiosError) => {
     return Promise.reject(error);
   }
 );
 
-export default axiosInstance;
+export default apiCaller;
