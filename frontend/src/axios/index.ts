@@ -28,8 +28,9 @@ apiCaller.interceptors.response.use(
   (error: AxiosError) => {
     const showError = getGlobalNotifyHandler();
     const message =
-      error.message ||
+      error.response?.data?.message ||
       "Something went wrong. Please try again later.";
+
     showError(message);
     return Promise.reject(error);
   }
