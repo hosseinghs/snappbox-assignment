@@ -1,8 +1,9 @@
 import apiCaller from "@/axios";
+import type { ICommission } from './type'
 
 const BASE_SCOPE_URL = '/commissions' as const
 
-export const getAllCommissionsAPI = async () => {
+export const getAllCommissionsAPI = async (): Promise<{ data: ICommission[] }> => {
     return await apiCaller.get(BASE_SCOPE_URL) 
 } 
 
