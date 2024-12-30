@@ -48,7 +48,7 @@ export default function CommissionPage() {
   return (
     <div style={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' } }>
         <div style={ { width: '80%', margin: '0 auto' }}>
-              <BaseTable loading={loading} rows={comissions} />
+              <BaseTable<NestedCommission> loading={loading} rows={comissions} />
         </div>
     </div>
   );

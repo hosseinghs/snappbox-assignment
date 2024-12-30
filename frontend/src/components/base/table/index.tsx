@@ -13,12 +13,12 @@ import {
 } from "@mui/material";
 import NestedRow from "./NestedRow";
 
-interface IProps {
-  rows: any;
+interface IProps<T> {
+  rows: T[];
   loading?: boolean
 }
 
-export default function BaseTable ({ loading, rows }: IProps) {
+export default function BaseTable<T> ({ loading, rows }: IProps<T>) {
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -33,8 +33,10 @@ export default function BaseTable ({ loading, rows }: IProps) {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Name</TableCell>
-            <TableCell>Commission Number</TableCell>
+            <TableCell>category</TableCell>
+            <TableCell>commission</TableCell>
+            <TableCell>promotion commission</TableCell>
+            <TableCell>edit</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
