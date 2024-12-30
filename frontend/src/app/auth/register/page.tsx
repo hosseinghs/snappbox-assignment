@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
 
-import FirstStepRegister from "@/components/auth/register/FirstStep";
-import SecondStepRegister from "@/components/auth/register/SecondStep";
+import FirstStepRegister from "@/components/auth/register/RegisterForm";
+import SecondStepRegister from "@/components/auth/register/VerifyOTP";
 import { sendUserInfoAPI, resendOTPCodeAPI, verifyOTPCodeAPI } from '@/services/auth'
 
 enum RegisterSteps {
