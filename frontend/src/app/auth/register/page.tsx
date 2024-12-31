@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import FirstStepRegister from "@/components/auth/register/RegisterForm";
 import SecondStepRegister from "@/components/auth/register/VerifyOTP";
 import { sendUserInfoAPI, resendOTPCodeAPI, verifyOTPCodeAPI } from '@/services/auth'
+import { useForm, SubmitHandler } from "react-hook-form"
+import type { IRegisterRequest } from '@/services/auth/register-request'
 
 enum RegisterSteps {
   REGISTER = 1,
@@ -13,14 +15,15 @@ enum RegisterSteps {
 }
 
 export default function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IRegisterRequest>()
+
+  const onSubmit: SubmitHandler<IRegisterRequest> = () => setStateToVerifyOTP()
+
   const router = useRouter()
-  const [userInfo, setUserInfo] = useState({
-    phone: '',
-    email: '',
-    password: '',
-    lastName: '',
-    firstName: '',
-  });
 
   const [state, setRegisterStep] = useState<RegisterSteps>(RegisterSteps.REGISTER);
   const [loading, setLoading] = useState<boolean>(false);
@@ -81,22 +84,15 @@ export default function Register() {
     }
   }
 
-  const updateUserInfo = ({ key, value }: { key: string; value: string }) => {
-    setUserInfo((prevUserInfo) => ({
-      ...prevUserInfo,
-      [key]: value,
-    }));
-  };
-
   const renderRegisterResult = () => registerResult ? <div>u r about to be redirected to login page :)</div> : <div>try again :(</div> 
 
   return (
     <div style={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' } }>
       {state === RegisterSteps.REGISTER && (
         <FirstStepRegister
-          submit={setStateToVerifyOTP}
-          userInfo={userInfo}
-          updateUserInfo={updateUserInfo}
+          submit={handleSubmit(onSubmit)}
+          errors={errors}
+          register={register}
         />
       )}
       {state === RegisterSteps.VERIFY_OTP && <SecondStepRegister onCompleteOTP={() => handleOTPVerification()} resendOTP={() => handleResendOTP()} />}
