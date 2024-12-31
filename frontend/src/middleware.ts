@@ -1,4 +1,4 @@
-import { getAccessToken } from '@/auth';
+import { getAccessToken } from '@/cookie';
 import { NextResponse, NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {

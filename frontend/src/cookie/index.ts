@@ -1,7 +1,9 @@
 import Cookies from 'js-cookie';
 
+const TOKEN_NAME = 'access_token'
+
 export const setAccessToken = (token: string): void => {
-  Cookies.set('access_token', token, {
+  Cookies.set(TOKEN_NAME, token, {
     secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
     httpOnly: false, // Cookies set via JavaScript are not httpOnly
     sameSite: 'strict', // Helps prevent CSRF
@@ -9,5 +11,5 @@ export const setAccessToken = (token: string): void => {
   });
 };
 
-export const getAccessToken = (): string | undefined => Cookies.get('access_token');
-export const removeRefreshToken = (): void => Cookies.remove('access_token')
+export const getAccessToken = (): string | undefined => Cookies.get(TOKEN_NAME);
+export const removeRefreshToken = (): void => Cookies.remove(TOKEN_NAME)

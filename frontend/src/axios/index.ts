@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { getAccessToken } from "@/auth";
+import { getAccessToken } from "@/cookie";
 import { getGlobalNotifyHandler } from "@/context/NotifyContext";
 
 // Create an Axios instance
