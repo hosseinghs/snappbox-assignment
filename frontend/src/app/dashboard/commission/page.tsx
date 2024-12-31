@@ -13,6 +13,7 @@ type NestedCommission = ICommission & {
 export default function CommissionPage() {
   const [loading, setLoading] = useState<boolean>(false)
   const [comissions, setCommissions] = useState<NestedCommission[]>([])
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
   function buildNestedArray(data: ICommission[]): NestedCommission[] {
     const root: NestedCommission[] = []; 
@@ -29,6 +30,11 @@ export default function CommissionPage() {
 
     return root;
 }
+
+  const handleSelectionChange = (newSelection: any[]) => {
+    setSelectedRows(newSelection);
+    console.log(selectedRows);
+  };
 
   const handleGetCommissionsList = async () => {
     try {
@@ -70,7 +76,13 @@ export default function CommissionPage() {
   return (
     <div style={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' } }>
         <div style={ { width: '80%', margin: '0 auto' }}>
-              <BaseTable<NestedCommission> hasCheckbox loading={loading} columns={columns} rows={comissions} />
+              <BaseTable<NestedCommission>
+                hasCheckbox
+                rows={comissions} 
+                loading={loading}
+                columns={columns}
+                onSelectionChange={handleSelectionChange}
+              />
         </div>
     </div>
   );

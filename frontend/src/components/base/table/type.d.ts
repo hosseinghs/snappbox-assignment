@@ -10,4 +10,5 @@ export interface ITableProps<T> {
     columns: IColumn[];
     loading?: boolean;
     hasCheckbox?: boolean;
+    onSelectionChange?: (selectedRows: T[]) => void;
 }

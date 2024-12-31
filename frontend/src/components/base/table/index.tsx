@@ -15,10 +15,11 @@ import TableNestedRow from "./TableNestedRow";
 import type { ITableProps } from "./type";
 
 export default function BaseTable<T>({
-  loading,
   rows,
+  loading,
   columns,
   hasCheckbox,
+  onSelectionChange
 }: ITableProps<T>) {
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
   const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
@@ -29,33 +30,46 @@ export default function BaseTable<T>({
       setSelectedRows((prevSelectedRows) => {
         const isRowSelected = prevSelectedRows.includes(row);
 
-        if (isRowSelected && !isSelected) return prevSelectedRows.filter((r) => r !== row);  // Deselect row
-        else if (!isRowSelected && isSelected) return [...prevSelectedRows, row];  // Select row
-        return prevSelectedRows;
+        const updatedSelection = isRowSelected && !isSelected
+          ? prevSelectedRows.filter((r) => r !== row)
+          : !isRowSelected && isSelected
+          ? [...prevSelectedRows, row]
+          : prevSelectedRows;
+
+        return updatedSelection;
       });
-      
-      // If the row has children, recursively select/deselect them as well
+
       if (row.children) row.children.forEach(updateSelection);
     };
 
-    updateSelection(row);  // Update selection for the parent and its children
+    updateSelection(row);
   };
 
-  // Handle "Select All" checkbox
+  // Update "Select All" checkbox state
   useEffect(() => {
-    // Check if all the top-level rows (not including children) are selected
     const allTopLevelRowsSelected = rows.every((row) =>
-      selectedRows.some((selectedRow) => selectedRow === row || (row.children && row.children.every((child) => selectedRows.includes(child))))
+      selectedRows.some(
+        (selectedRow) =>
+          selectedRow === row ||
+          (row.children &&
+            row.children.every((child) => selectedRows.includes(child)))
+      )
     );
-  
     setAreAllRowsSelected(allTopLevelRowsSelected);
-  }, [selectedRows, rows.length, rows]);
-  
+  }, [selectedRows, rows]);
+
+  // Notify the parent component about selected rows
+  useEffect(() => {
+    if (onSelectionChange) {
+      onSelectionChange(selectedRows);
+    }
+  }, [selectedRows, onSelectionChange]);
 
   const handleSelectAll = () => {
-    if (areAllRowsSelected) setSelectedRows([]);
-    else {
-      const allRows = [];
+    if (areAllRowsSelected) {
+      setSelectedRows([]);
+    } else {
+      const allRows: T[] = [];
       const selectAllRows = (rows: T[]) => {
         rows.forEach((row) => {
           allRows.push(row);
@@ -66,7 +80,6 @@ export default function BaseTable<T>({
       setSelectedRows(allRows);
     }
   };
-
   if (loading) return (<TableLoading />);
 
   return (
