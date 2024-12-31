@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import { EMAIL_REGEX, PHONE_NUMBER_REGEX } from '@/utils/validations';
 
 interface FirstStepRegisterProps {
   submit: () => void;
@@ -46,7 +47,10 @@ export default function FirstStepRegister({
         </Grid>
         <Grid item xs={12}>
             <TextField
-              {...register("email", { required: 'required' })}
+              {...register("email", { required: 'required', pattern: {
+                value: EMAIL_REGEX,
+                message: 'Invalid email address'
+              } })}
               label="Email"
               variant="outlined"
               fullWidth
@@ -67,7 +71,10 @@ export default function FirstStepRegister({
         </Grid>
         <Grid item xs={12}>
           <TextField
-            {...register("phone", { required: 'required' })}
+            {...register("phone", { required: 'required', pattern: {
+              value: PHONE_NUMBER_REGEX,
+              message: 'Invalid phone number'
+            } })}
             label="Phone"
             variant="outlined"
             fullWidth

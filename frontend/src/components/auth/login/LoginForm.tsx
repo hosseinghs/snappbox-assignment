@@ -11,6 +11,8 @@ import { useRouter } from 'next/navigation';
 import { setAccessToken } from '@/cookie';
 import { useForm, SubmitHandler } from "react-hook-form"
 
+import { EMAIL_REGEX } from '@/utils/validations';
+
 interface IForm {
     email: string
     password: string
@@ -52,7 +54,10 @@ export default function LoginForm() {
                 fullWidth
                 error={!!errors.email}
                 helperText={errors.email?.message}
-                {...register("email", { required: 'required' })}
+                {...register("email", { required: 'required', pattern: {
+                  value: EMAIL_REGEX,
+                  message: 'invalid email'
+                } })}
               />
           </Grid>
           <Grid item xs={12}>
