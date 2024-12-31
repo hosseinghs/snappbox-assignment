@@ -91,11 +91,11 @@ export default function BaseTable<T>({
             rows.map((row, i: number) => (
               <TableNestedRow<T>
                 key={i}
-                hasCheckbox={hasCheckbox}
-                cols={columns}
                 row={row}
-                onRowSelect={handleRowSelect}
+                cols={columns}
                 isSelected={selectedRows.includes(row)}
+                hasCheckbox={hasCheckbox}
+                onRowSelect={handleRowSelect}
                 selectedRows={selectedRows}
               />
             ))

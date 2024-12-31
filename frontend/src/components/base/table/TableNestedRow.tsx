@@ -40,19 +40,19 @@ export default function TableNestedRow<T>({
           <TableCell>
             <Checkbox
               checked={isSelected}
-              onChange={() => onRowSelect(row, !isSelected)}  // Pass the selection state
+              onChange={() => onRowSelect(row, !isSelected)}
             />
           </TableCell>
         )}
         {cols?.length && cols.map((col) => (
           <TableCell key={col.key}>
-            {col.collapseParent && row[col.key]?.children && (
+            {col.collapseParent && row.children && (
               <IconButton style={{ width: '10%', marginRight: '4px' }} onClick={() => setOpen(!open)}>
                 {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
               </IconButton>
             )}
             {editMode && ['commission_normal', 'commission_promotion'].includes(col.key) ? (
-              <CommissionInput />
+              <CommissionInput  />
             ) : col.formatter ? (
               col.formatter(row)
             ) : (
