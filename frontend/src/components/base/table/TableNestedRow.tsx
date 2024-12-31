@@ -46,7 +46,7 @@ export default function TableNestedRow<T>({
         )}
         {cols?.length && cols.map((col) => (
           <TableCell key={col.key}>
-            {col.collapseParent && (
+            {col.collapseParent && row[col.key]?.children && (
               <IconButton style={{ width: '10%', marginRight: '4px' }} onClick={() => setOpen(!open)}>
                 {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
               </IconButton>
