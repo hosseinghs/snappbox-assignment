@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Table,
+  Button,
   Checkbox,
   Collapse,
   TableRow,
@@ -8,8 +9,10 @@ import {
   TableBody,
   IconButton,
 } from "@mui/material";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import CommissionInput from "@/components/commission/CommissionInput";
+import { KeyboardArrowDown, KeyboardArrowUp, Edit, Check } from "@mui/icons-material";
 import type { IColumn } from "./type";
+
 interface IProps<T> {
   row: T;
   cols?: IColumn<T>[];
@@ -18,11 +21,13 @@ interface IProps<T> {
 
 export default function NestedRow<T> ({ row, hasCheckbox, cols }: IProps<T>) {
   const [open, setOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   return (
     <>
       <TableRow>
-        { hasCheckbox && <TableCell>
+        { hasCheckbox && 
+        <TableCell>
           <Checkbox />
         </TableCell> }
         { cols?.length && cols.map(col => (
@@ -33,10 +38,21 @@ export default function NestedRow<T> ({ row, hasCheckbox, cols }: IProps<T>) {
                   {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                 </IconButton>
             }
-            { col.formatter ? col.formatter(row) : row[col.key] }
+
+
+            { editMode && ['commission_normal', 'commission_promotion'].includes(col.key) ?
+              <CommissionInput />
+              :
+              col.formatter ? col.formatter(row) : row[col.key]
+            }
+
+
           </TableCell>
         )) }
         <TableCell>
+          <Button onClick={() => setEditMode(!editMode)}>
+            { editMode ? <Check /> : <Edit /> }
+          </Button>
         </TableCell>
       </TableRow>
       {row.children && (

@@ -1,5 +1,5 @@
 'use client'
-
+import { useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -16,6 +16,14 @@ import NestedRow from "./NestedRow";
 import type { ITableProps } from "./type";
 
 export default function BaseTable<T>({ loading, rows, columns, hasCheckbox }: ITableProps<T>) {
+  const [selectedRows, setSelectedRow] = useState([])
+  const [areAllRowsSelected, setAreAllRowsSelected] = useState(false)
+
+  useEffect(() => {
+    console.log(rows);
+    // setSelectedRow
+  }, [areAllRowsSelected])
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -31,7 +39,7 @@ export default function BaseTable<T>({ loading, rows, columns, hasCheckbox }: IT
           <TableRow>
             {/* checkbox */}
             {hasCheckbox && <TableCell>
-                <Checkbox />
+                <Checkbox value={areAllRowsSelected} onChange={() => setAreAllRowsSelected(!areAllRowsSelected)} />
             </TableCell>}
             {/* columns */}
             {columns.map((col) => (
