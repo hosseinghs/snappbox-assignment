@@ -1,7 +1,8 @@
-export interface IColumn {
+export interface IColumn<T> {
     key: string; 
     label: string;
-    collapseParent?: boolean; 
+    collapseParent?: boolean;
+    formatter?: (val: T) => string 
 }
 
 export interface ITableProps<T> {

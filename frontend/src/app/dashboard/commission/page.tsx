@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 
 import BaseTable from '@/components/base/table'
 import { getAllCommissionsAPI } from '@/services/comissions';
+import type { IColumn } from '@/components/base/table/type';
 import type { ICommission } from '@/services/comissions/type';
 
 type NestedCommission = ICommission & {
@@ -44,7 +45,7 @@ export default function CommissionPage() {
     handleGetCommissionsList()
   }, [])
 
-  const columns = [
+  const columns: IColumn<ICommission>[] = [
     {
       key: 'name',
       label: 'category',
@@ -52,11 +53,13 @@ export default function CommissionPage() {
     },
     {
       key: 'commission_normal',
-      label: 'commission'
+      label: 'commission',
+      formatter: (row) => `${row.commission_normal}%`,
     },
     {
       key: 'commission_promotion',
-      label: 'promition commission'
+      label: 'promition commission',
+      formatter: (row) => `${row.commission_promotion}%`
     },
     {
       key: '',

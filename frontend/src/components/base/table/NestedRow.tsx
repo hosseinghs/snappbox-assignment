@@ -12,7 +12,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import type { IColumn } from "./type";
 interface IProps<T> {
   row: T;
-  cols?: IColumn[];
+  cols?: IColumn<T>[];
   hasCheckbox?: boolean;
 }
 
@@ -28,12 +28,12 @@ export default function NestedRow<T> ({ row, hasCheckbox, cols }: IProps<T>) {
         { cols?.length && cols.map(col => (
           <TableCell key={col.key}>
             {
-            col.collapseParent &&
-        <IconButton style={{ width: '10%', marginRight: '4px' }} onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
-        }
-            { row[col.key] }
+              col.collapseParent &&
+                <IconButton style={{ width: '10%', marginRight: '4px' }} onClick={() => setOpen(!open)}>
+                  {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                </IconButton>
+            }
+            { col.formatter ? col.formatter(row) : row[col.key] }
           </TableCell>
         )) }
         <TableCell>
