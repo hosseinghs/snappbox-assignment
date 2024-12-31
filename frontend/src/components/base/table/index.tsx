@@ -15,14 +15,58 @@ import {
 import NestedRow from "./NestedRow";
 import type { ITableProps } from "./type";
 
-export default function BaseTable<T>({ loading, rows, columns, hasCheckbox }: ITableProps<T>) {
-  const [selectedRows, setSelectedRow] = useState([])
-  const [areAllRowsSelected, setAreAllRowsSelected] = useState(false)
+export default function BaseTable<T>({
+  loading,
+  rows,
+  columns,
+  hasCheckbox,
+}: ITableProps<T>) {
+  const [selectedRows, setSelectedRows] = useState<T[]>([]);
+  const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
 
+  // Recursively select/deselect rows and their children
+  const handleRowSelect = (row: T, isSelected: boolean) => {
+    const updateSelection = (row: T) => {
+      setSelectedRows((prevSelectedRows) => {
+        const isRowSelected = prevSelectedRows.includes(row);
+
+        if (isRowSelected && !isSelected) return prevSelectedRows.filter((r) => r !== row);  // Deselect row
+        else if (!isRowSelected && isSelected) return [...prevSelectedRows, row];  // Select row
+        return prevSelectedRows;
+      });
+      
+      // If the row has children, recursively select/deselect them as well
+      if (row.children) row.children.forEach(updateSelection);
+    };
+
+    updateSelection(row);  // Update selection for the parent and its children
+  };
+
+  // Handle "Select All" checkbox
   useEffect(() => {
-    console.log(rows);
-    // setSelectedRow
-  }, [areAllRowsSelected])
+    // Check if all the top-level rows (not including children) are selected
+    const allTopLevelRowsSelected = rows.every((row) =>
+      selectedRows.some((selectedRow) => selectedRow === row || (row.children && row.children.every((child) => selectedRows.includes(child))))
+    );
+  
+    setAreAllRowsSelected(allTopLevelRowsSelected);
+  }, [selectedRows, rows.length, rows]);
+  
+
+  const handleSelectAll = () => {
+    if (areAllRowsSelected) setSelectedRows([]);
+    else {
+      const allRows = [];
+      const selectAllRows = (rows: T[]) => {
+        rows.forEach((row) => {
+          allRows.push(row);
+          if (row.children) selectAllRows(row.children);
+        });
+      };
+      selectAllRows(rows);
+      setSelectedRows(allRows);
+    }
+  };
 
   if (loading) {
     return (
@@ -37,11 +81,14 @@ export default function BaseTable<T>({ loading, rows, columns, hasCheckbox }: IT
       <Table>
         <TableHead>
           <TableRow>
-            {/* checkbox */}
-            {hasCheckbox && <TableCell>
-                <Checkbox value={areAllRowsSelected} onChange={() => setAreAllRowsSelected(!areAllRowsSelected)} />
-            </TableCell>}
-            {/* columns */}
+            {hasCheckbox && (
+              <TableCell>
+                <Checkbox
+                  checked={areAllRowsSelected}
+                  onChange={handleSelectAll}
+                />
+              </TableCell>
+            )}
             {columns.map((col) => (
               <TableCell key={col.key}>
                 {col.label}
@@ -52,7 +99,15 @@ export default function BaseTable<T>({ loading, rows, columns, hasCheckbox }: IT
         <TableBody>
           {rows?.length > 0 ? (
             rows.map((row, i: number) => (
-              <NestedRow<T> hasCheckbox={hasCheckbox} cols={columns} key={i} row={row} />
+              <NestedRow<T>
+                key={i}
+                hasCheckbox={hasCheckbox}
+                cols={columns}
+                row={row}
+                onRowSelect={handleRowSelect}
+                isSelected={selectedRows.includes(row)}
+                selectedRows={selectedRows}
+              />
             ))
           ) : (
             <TableRow>
@@ -65,4 +120,4 @@ export default function BaseTable<T>({ loading, rows, columns, hasCheckbox }: IT
       </Table>
     </TableContainer>
   );
-};
+}
