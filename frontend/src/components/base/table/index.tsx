@@ -1,18 +1,17 @@
 'use client'
 import { useState, useEffect } from "react";
 import {
-  Box,
   Paper,
   Table,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
-  TableHead,
   TableContainer,
-  CircularProgress,
 } from "@mui/material";
-import NestedRow from "./NestedRow";
+
+import TableHeader from './TableHeader';
+import TableLoading from "./TableLoading";
+import TableNestedRow from "./TableNestedRow";
 import type { ITableProps } from "./type";
 
 export default function BaseTable<T>({
@@ -68,38 +67,16 @@ export default function BaseTable<T>({
     }
   };
 
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <CircularProgress />
-      </Box>
-    );
-  }
+  if (loading) return (<TableLoading />);
 
   return (
     <TableContainer component={Paper}>
       <Table>
-        <TableHead>
-          <TableRow>
-            {hasCheckbox && (
-              <TableCell>
-                <Checkbox
-                  checked={areAllRowsSelected}
-                  onChange={handleSelectAll}
-                />
-              </TableCell>
-            )}
-            {columns.map((col) => (
-              <TableCell key={col.key}>
-                {col.label}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+        <TableHeader columns={columns} hasCheckbox={hasCheckbox} handleSelectAll={handleSelectAll} areAllRowsSelected={areAllRowsSelected} />
         <TableBody>
           {rows?.length > 0 ? (
             rows.map((row, i: number) => (
-              <NestedRow<T>
+              <TableNestedRow<T>
                 key={i}
                 hasCheckbox={hasCheckbox}
                 cols={columns}

@@ -12,6 +12,7 @@ import {
 import CommissionInput from "@/components/commission/CommissionInput";
 import { KeyboardArrowDown, KeyboardArrowUp, Edit, Check } from "@mui/icons-material";
 import type { IColumn } from "./type";
+
 interface IProps<T> {
   row: T;
   cols?: IColumn<T>[];
@@ -21,7 +22,7 @@ interface IProps<T> {
   onRowSelect: (row: T, isSelected: boolean) => void;  // Updated to include selection state
 }
 
-export default function NestedRow<T>({
+export default function TableNestedRow<T>({
   row,
   cols,
   isSelected,
@@ -72,7 +73,7 @@ export default function NestedRow<T>({
               <Table size="small" aria-label="nested table">
                 <TableBody>
                   {row.children.map((child: T, index: number) => (
-                    <NestedRow
+                    <TableNestedRow
                       key={index}
                       hasCheckbox={hasCheckbox}
                       row={child}
