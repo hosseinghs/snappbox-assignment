@@ -46,27 +46,25 @@ export default function LoginForm() {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <div>
               <TextField
                 label="email"
                 variant="outlined"
                 fullWidth
+                error={!!errors.email}
+                helperText={errors.email?.message}
                 {...register("email", { required: 'required' })}
               />
-              <p>{ errors.email?.message }</p>
-            </div>
           </Grid>
           <Grid item xs={12}>
-            <div>
               <TextField
                 label="password"
                 variant="outlined"
                 fullWidth
                 type="password"
+                error={!!errors.password}
+                helperText={errors.password?.message}
                 {...register("password", { required: 'required' })}
               />
-              <p>{ errors.password?.message }</p>
-            </div>
           </Grid>
         </Grid>
         <Button type="submit" onClick={handleSubmit(onSubmit)}>

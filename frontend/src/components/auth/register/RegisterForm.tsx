@@ -25,61 +25,55 @@ export default function FirstStepRegister({
     >
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <div>
             <TextField
               {...register("firstName", { required: 'required' })}
               label="First Name"
               variant="outlined"
               fullWidth
+              error={!!errors.firstName}
+              helperText={errors.firstName?.message}
             />
-            <p>{ errors.firstName?.message }</p>
-          </div>
         </Grid>
         <Grid item xs={12}>
-          <div>
             <TextField
               {...register("lastName", { required: 'required' })}
               label="Last Name"
               variant="outlined"
               fullWidth
+              error={!!errors.lastName}
+              helperText={errors.lastName?.message}
             />
-            <p>{ errors.lastName?.message }</p>
-          </div>
         </Grid>
         <Grid item xs={12}>
-          <div>
             <TextField
               {...register("email", { required: 'required' })}
               label="Email"
               variant="outlined"
               fullWidth
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
-            <p>{ errors.email?.message }</p>
-            </div>
         </Grid>
         <Grid item xs={12}>
-          <div>
             <TextField
               {...register("password", { required: 'required' })}
               type='password'
               label="Password"
               variant="outlined"
               fullWidth
+              error={!!errors.password}
+              helperText={errors.password?.message}
             />
-            <p>{ errors.password?.message }</p>
-
-          </div>
         </Grid>
         <Grid item xs={12}>
-         <div>
           <TextField
             {...register("phone", { required: 'required' })}
             label="Phone"
             variant="outlined"
             fullWidth
+            error={!!errors.phone}
+            helperText={errors.phone?.message}
           />
-            <p>{ errors.phone?.message }</p>
-         </div>
         </Grid>
       </Grid>
       <Button type="submit">Next</Button>
