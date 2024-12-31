@@ -1,51 +1,55 @@
 import { useState } from "react";
 import {
   Table,
+  Checkbox,
   Collapse,
   TableRow,
   TableCell,
-  TextField,
   TableBody,
   IconButton,
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import type { IColumn } from "./type";
+interface IProps<T> {
+  row: T;
+  cols?: IColumn[];
+  hasCheckbox?: boolean;
+}
 
-const NestedRow = ({ row }) => {
+export default function NestedRow<T> ({ row, hasCheckbox, cols }: IProps<T>) {
   const [open, setOpen] = useState(false);
-  const [commissionNumber, setCommissionNumber] = useState(row.commissionNumber);
-
-  const handleEdit = (e) => {
-    setCommissionNumber(e.target.value);
-  };
 
   return (
     <>
       <TableRow>
-        <TableCell>
-          <IconButton onClick={() => setOpen(!open)}>
+        { hasCheckbox && <TableCell>
+          <Checkbox />
+        </TableCell> }
+        { cols?.length && cols.map(col => (
+          <TableCell key={col.key}>
+            {
+            col.collapseParent &&
+        <IconButton style={{ width: '10%', marginRight: '4px' }} onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
-        </TableCell>
-        <TableCell>{row.name}</TableCell>
+        }
+            { row[col.key] }
+          </TableCell>
+        )) }
         <TableCell>
-          <TextField
-            value={commissionNumber}
-            onChange={handleEdit}
-            variant="standard"
-          />
         </TableCell>
       </TableRow>
       {row.children && (
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Table size="small" aria-label="nested table">
-                <TableBody>
-                  {row.children.map((child, index) => (
-                    <NestedRow key={index} row={child} />
-                  ))}
-                </TableBody>
-              </Table>
+              <Collapse in={open} timeout="auto" unmountOnExit>
+                <Table size="small" aria-label="nested table">
+                  <TableBody>
+                    {row.children.map((child: T, index: number) => (
+                      <NestedRow hasCheckbox={hasCheckbox} key={index} row={child} cols={cols} />
+                    ))}
+                  </TableBody>
+                </Table>
             </Collapse>
           </TableCell>
         </TableRow>
@@ -53,5 +57,3 @@ const NestedRow = ({ row }) => {
     </>
   );
 };
-
-export default NestedRow;

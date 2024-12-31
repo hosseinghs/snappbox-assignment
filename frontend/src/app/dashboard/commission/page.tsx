@@ -44,11 +44,30 @@ export default function CommissionPage() {
     handleGetCommissionsList()
   }, [])
 
+  const columns = [
+    {
+      key: 'name',
+      label: 'category',
+      collapseParent: true,
+    },
+    {
+      key: 'commission_normal',
+      label: 'commission'
+    },
+    {
+      key: 'commission_promotion',
+      label: 'promition commission'
+    },
+    {
+      key: '',
+      label: 'edit'
+    },
+  ]
 
   return (
     <div style={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' } }>
         <div style={ { width: '80%', margin: '0 auto' }}>
-              <BaseTable<NestedCommission> loading={loading} rows={comissions} />
+              <BaseTable<NestedCommission> hasCheckbox loading={loading} columns={columns} rows={comissions} />
         </div>
     </div>
   );

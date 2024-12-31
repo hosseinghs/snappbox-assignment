@@ -4,6 +4,7 @@ import {
   Box,
   Paper,
   Table,
+  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -12,13 +13,9 @@ import {
   CircularProgress,
 } from "@mui/material";
 import NestedRow from "./NestedRow";
+import type { ITableProps } from "./type";
 
-interface IProps<T> {
-  rows: T[];
-  loading?: boolean
-}
-
-export default function BaseTable<T> ({ loading, rows }: IProps<T>) {
+export default function BaseTable<T>({ loading, rows, columns, hasCheckbox }: ITableProps<T>) {
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -32,21 +29,30 @@ export default function BaseTable<T> ({ loading, rows }: IProps<T>) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell />
-            <TableCell>category</TableCell>
-            <TableCell>commission</TableCell>
-            <TableCell>promotion commission</TableCell>
-            <TableCell>edit</TableCell>
+            {/* checkbox */}
+            {hasCheckbox && <TableCell>
+                <Checkbox />
+            </TableCell>}
+            {/* columns */}
+            {columns.map((col) => (
+              <TableCell key={col.key}>
+                {col.label}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows?.length && rows.map((row, i: number) => (
-            <NestedRow key={i} row={row} />
-          ))}
-
-          {
-            !rows?.length && <div>no data</div>
-          }
+          {rows?.length > 0 ? (
+            rows.map((row, i: number) => (
+              <NestedRow<T> hasCheckbox={hasCheckbox} cols={columns} key={i} row={row} />
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length + (hasCheckbox ? 1 : 0)} align="center">
+                No data
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
