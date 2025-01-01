@@ -1,12 +1,13 @@
 import CodeInputComponent from "@/components/base/CodeInput";
 
 interface IProps {
+    loading: boolean;
     resendOTP: () => void;
     onCompleteOTP: (otp: string) => void;
 }
 
-export default function SecondStepRegister({ onCompleteOTP, resendOTP }: IProps) {
+export default function SecondStepRegister({ loading, onCompleteOTP, resendOTP }: IProps) {
     return (
-        <CodeInputComponent onResendClick={resendOTP} onSubmit={onCompleteOTP} />
+        <CodeInputComponent loading={loading} onResendClick={resendOTP} onSubmit={onCompleteOTP} />
     )
 }

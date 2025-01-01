@@ -1,16 +1,18 @@
-import { Box, Button, Grid, TextField } from '@mui/material';
+import { Box, Button, Grid, TextField, CircularProgress } from '@mui/material';
 
 import { EMAIL_REGEX, PHONE_NUMBER_REGEX } from '@/utils/validations';
 
 interface FirstStepRegisterProps {
   submit: () => void;
   errors: any;
+  loading: boolean;
   register: any;
 }
 
 export default function FirstStepRegister({
   submit,
   errors,
+  loading,
   register,
 }: FirstStepRegisterProps) {
   return (
@@ -81,7 +83,9 @@ export default function FirstStepRegister({
           />
         </Grid>
         <Grid item xs={12}>
-          <Button variant='contained' type="submit">Next</Button>
+          <Button variant='contained' type="submit">{
+            loading ? <CircularProgress size='25px' /> : 'Next'
+            }</Button>
         </Grid>
       </Grid>
     </Box>

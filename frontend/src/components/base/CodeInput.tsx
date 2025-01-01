@@ -4,13 +4,14 @@ import Button from '@mui/material/Button';
 
 interface CodeInputComponentProps {
   length?: number;
+  loading?: boolean;
   onSubmit: (otp: string) => void;
   onResendClick: () => void;
 };
 
 const TIMER = 10;
 
-const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 4, onResendClick, onSubmit }) => {
+const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 4, loading, onResendClick, onSubmit }) => {
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
   const [timer, setTimer] = useState(TIMER);
   const [otp, setOtp] = useState<string>('');
@@ -96,7 +97,7 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 4, onR
         disabled={length !== otp.length}
         onClick={() => onSubmit(otp)}
       >
-        Submit OTP
+        {loading ? 'Loading...' : 'Submit OTP'}
       </Button>
     </div>
   );

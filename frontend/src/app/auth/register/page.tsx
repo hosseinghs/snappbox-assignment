@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
-import { sendUserInfoAPI, resendOTPCodeAPI, verifyOTPCodeAPI } from '@/services/auth'
 import { useForm, SubmitHandler } from "react-hook-form"
+import { sendUserInfoAPI, resendOTPCodeAPI, verifyOTPCodeAPI } from '@/services/auth'
 import type { IRegisterRequest } from '@/services/auth/register-request'
 
 const FirstStepRegister = dynamic(() => import('@/components/auth/register/RegisterForm')) 
@@ -90,10 +90,11 @@ export default function Register() {
         <FirstStepRegister
           submit={handleSubmit(onSubmit)}
           errors={errors}
+          loading={loading}
           register={register}
         />
       )}
-      {state === RegisterSteps.VERIFY_OTP && <SecondStepRegister onCompleteOTP={() => handleOTPVerification()} resendOTP={() => handleResendOTP()} />}
+      {state === RegisterSteps.VERIFY_OTP && <SecondStepRegister loading={loading} onCompleteOTP={() => handleOTPVerification()} resendOTP={() => handleResendOTP()} />}
       {state === RegisterSteps.RESULT && renderRegisterResult()}
     </div>
   );
