@@ -80,8 +80,10 @@ export default function FirstStepRegister({
             helperText={errors.phone?.message}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Button variant='contained' type="submit">Next</Button>
+        </Grid>
       </Grid>
-      <Button type="submit">Next</Button>
     </Box>
   );
 }

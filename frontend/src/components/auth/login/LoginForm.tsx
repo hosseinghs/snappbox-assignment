@@ -67,10 +67,14 @@ export default function LoginForm() {
                 {...register("password", { required: 'required' })}
               />
           </Grid>
+
+          <Grid item xs={12}>
+          <Button variant='contained' type="submit" onClick={handleSubmit(onSubmit)}>
+            {loading ? <CircularProgress size="25px" /> : 'Login'}
+          </Button>
         </Grid>
-        <Button type="submit" onClick={handleSubmit(onSubmit)}>
-          {loading ? <CircularProgress /> : 'Login'}
-        </Button>
+        </Grid>
+        
       </Box>
     )
 }

@@ -69,7 +69,7 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 4, onR
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
         {Array.from({ length }, (_, index) => (
           <input
             key={index}
@@ -84,18 +84,19 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 4, onR
         ))}
       </div>
 
-      <div>
+      <div style={{ margin: '1rem 0' }}>
         {timer > 0 && (
           <p>Time remaining: {Math.floor(timer / 60)}:{String(timer % 60).padStart(2, '0')}</p>
         )}
       </div>
 
       {timer === 0 && (
-        <Button onClick={handleResetTimer}>Request New OTP</Button>
+        <Button variant='outlined' onClick={handleResetTimer}>New OTP</Button>
       )}
 
       <Button
         variant='contained'
+        style={{ marginTop: '1rem' }}
         disabled={length !== otp.length}
         onClick={() => onSubmit(otp)}
       >
