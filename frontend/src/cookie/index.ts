@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-const TOKEN_NAME = 'access_token'
+export const TOKEN_NAME = 'access_token'
 
 export const setAccessToken = (token: string): void => {
   Cookies.set(TOKEN_NAME, token, {

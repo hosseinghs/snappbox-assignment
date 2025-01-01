@@ -1,5 +1,4 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import './style.css'
@@ -7,7 +6,6 @@ import './style.css'
 import { getAccessToken, removeAccessToken } from '@/cookie'
 
 export default function Header() {
-    const router = useRouter()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     
     useEffect(() => {
@@ -18,7 +16,6 @@ export default function Header() {
     const logout = () => {
         removeAccessToken()
         setIsLoggedIn(false)
-        router.push('/auth/login')
     }
 
     const loggedInComponent = () => <Link className='header__link' href="#" onClick={() => logout()}>Logout</Link>
