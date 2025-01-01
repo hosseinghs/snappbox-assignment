@@ -1,10 +1,5 @@
-'use client'
-import { useState, useEffect } from "react";
-import {
-  Paper,
-  Table,
-  TableContainer,
-} from "@mui/material";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { Paper, Table, TableContainer } from "@mui/material";
 
 import TableBody from "./TableBody";
 import TableHeader from './TableHeader';
@@ -20,59 +15,55 @@ export default function BaseTable<T extends { children?: T[] }>({
 }: ITableProps<T>) {
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
   const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
+  const selectedRowsRef = useRef<Map<T, boolean>>(new Map());
 
-  const handleRowSelect = (row: T, isSelected: boolean) => {
-    const updateSelection = (row: T) => {
-      setSelectedRows((prevSelectedRows) => {
-        const isRowSelected = prevSelectedRows.includes(row);
-
-        const updatedSelection = isRowSelected && !isSelected
-          ? prevSelectedRows.filter((r) => r !== row)
-          : !isRowSelected && isSelected
-          ? [...prevSelectedRows, row]
-          : prevSelectedRows;
-
-        return updatedSelection;
-      });
-
-      if (row.children) row.children.forEach(updateSelection);
+  const flattenedRows = useMemo(() => {
+    const flattenRows = (rows: T[]) => {
+      return rows.reduce((acc: T[], row) => {
+        acc.push(row);
+        if (row.children) acc.push(...flattenRows(row.children));
+        return acc;
+      }, []);
     };
+    return flattenRows(rows);
+  }, [rows]);
 
-    updateSelection(row);
-  };
+  const allTopLevelRowsSelected = useMemo(() => {
+    return rows.every((row) =>
+      selectedRowsRef.current.has(row) ||
+      (row.children && row.children.every((child) => selectedRowsRef.current.has(child)))
+    );
+  }, [rows]);
 
   useEffect(() => {
-    const allTopLevelRowsSelected = rows.every((row) =>
-      selectedRows.some(
-        (selectedRow) =>
-          selectedRow === row ||
-          (row.children &&
-            row.children.every((child) => selectedRows.includes(child)))
-      )
-    );
     setAreAllRowsSelected(allTopLevelRowsSelected);
-  }, [selectedRows, rows]);
+  }, [allTopLevelRowsSelected]);
 
   useEffect(() => {
     if (onSelectionChange) onSelectionChange(selectedRows);
   }, [selectedRows, onSelectionChange]);
 
+  const handleRowSelect = (row: T, isSelected: boolean) => {
+    if (isSelected) selectedRowsRef.current.set(row, true);
+    else selectedRowsRef.current.delete(row);
+
+    const updatedSelectedRows = Array.from(selectedRowsRef.current.keys());
+    setSelectedRows(updatedSelectedRows);
+
+    if (row.children) row.children.forEach((child) => handleRowSelect(child, isSelected));
+  };
+
   const handleSelectAll = () => {
     if (areAllRowsSelected) {
+      selectedRowsRef.current.clear();
       setSelectedRows([]);
     } else {
-      const allRows: T[] = [];
-      const selectAllRows = (rows: T[]) => {
-        rows.forEach((row) => {
-          allRows.push(row);
-          if (row.children) selectAllRows(row.children);
-        });
-      };
-      selectAllRows(rows);
-      setSelectedRows(allRows);
+      flattenedRows.forEach((row) => selectedRowsRef.current.set(row, true));
+      setSelectedRows(flattenedRows);
     }
   };
-  if (loading) return (<TableLoading />);
+
+  if (loading) return <TableLoading />;
 
   return (
     <TableContainer component={Paper}>
