@@ -19,3 +19,8 @@ export interface IVerifyRequest {
 export interface ILoginResponse {
   access_token: string
 }
+
+export interface ILoginForm {
+  email: string;
+  password: string;
+};
