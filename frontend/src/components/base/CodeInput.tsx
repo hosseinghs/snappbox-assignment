@@ -28,24 +28,20 @@ const CodeInputComponent: React.FC<CodeInputComponentProps> = ({ length = 4, onR
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-    if (e.key === 'Backspace' && index > 0 && !inputsRef.current[index]?.value) {
-      inputsRef.current[index - 1]?.focus();
-    }
+    if (e.key === 'Backspace' && index > 0 && !inputsRef.current[index]?.value) inputsRef.current[index - 1]?.focus();
   };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const pastedData = e.clipboardData.getData('Text');
-
+    
     if (/^\d{1,5}$/.test(pastedData)) {
       pastedData.split('').forEach((digit, i) => {
         if (i < length && inputsRef.current[i]) inputsRef.current[i]!.value = digit;
       });
-
-      const nextEmptyIndex = pastedData.length;
-      if (nextEmptyIndex < length) inputsRef.current[nextEmptyIndex]?.focus();
+      
+      setOtp(pastedData);
     }
-
-    e.preventDefault();
   };
 
   useEffect(() => {
