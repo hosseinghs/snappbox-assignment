@@ -19,6 +19,7 @@ enum RegisterSteps {
 export default function Register() {
   const {
     register,
+    getValues,
     handleSubmit,
     formState: { errors },
   } = useForm<IRegisterRequest>()
@@ -38,8 +39,6 @@ export default function Register() {
       const { data } = await sendUserInfoAPI(payload)
       setVerifyCode(data.verify_code)
       setRegisterStep(RegisterSteps.VERIFY_OTP)
-    } catch(e) {
-      console.log(e);
     } finally {
       setLoading(false)
     }
@@ -48,17 +47,14 @@ export default function Register() {
   const handleResendOTP = async () => {
     try {
       setLoading(true)
-
       if (!verifyCode) return
 
       const payload = {
-        email: userInfo.email,
+        email: getValues('email'),
         verify_code: verifyCode
       }
       const { data } = await resendOTPCodeAPI(payload)
       setVerifyCode(data)
-    } catch(e) {
-      throw new Error(e)
     } finally {
       setLoading(false)
     } 
@@ -69,7 +65,7 @@ export default function Register() {
       setLoading(true)
       if (!verifyCode) return
       const payload = {
-        email: userInfo.email,
+        email: getValues('email'),
         verify_code: verifyCode
       }
       const { data } = await verifyOTPCodeAPI(payload)
