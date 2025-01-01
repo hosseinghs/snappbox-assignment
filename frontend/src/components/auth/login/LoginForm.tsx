@@ -21,7 +21,7 @@ export default function LoginForm() {
    
     const router = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
-
+    // todo: call login outside this component
     async function login(payload: IForm) {
         try {
             setLoading(true)

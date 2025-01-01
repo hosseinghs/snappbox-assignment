@@ -82,6 +82,7 @@ export default function Register() {
     }
   }
 
+  // make this component
   const renderRegisterResult = () => registerResult ? <div>u r about to be redirected to login page :)</div> : <div>try again :(</div> 
 
   return (
