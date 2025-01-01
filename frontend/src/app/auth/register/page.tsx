@@ -1,12 +1,14 @@
 'use client'
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 
-import FirstStepRegister from "@/components/auth/register/RegisterForm";
-import SecondStepRegister from "@/components/auth/register/VerifyOTP";
 import { sendUserInfoAPI, resendOTPCodeAPI, verifyOTPCodeAPI } from '@/services/auth'
 import { useForm, SubmitHandler } from "react-hook-form"
 import type { IRegisterRequest } from '@/services/auth/register-request'
+
+const FirstStepRegister = dynamic(() => import('@/components/auth/register/RegisterForm')) 
+const SecondStepRegister = dynamic(() => import('@/components/auth/register/VerifyOTP')) 
 
 enum RegisterSteps {
   REGISTER = 1,
@@ -21,7 +23,7 @@ export default function Register() {
     formState: { errors },
   } = useForm<IRegisterRequest>()
 
-  const onSubmit: SubmitHandler<IRegisterRequest> = () => setStateToVerifyOTP()
+  const onSubmit: SubmitHandler<IRegisterRequest> = (data) => setStateToVerifyOTP(data)
 
   const router = useRouter()
 
@@ -30,10 +32,10 @@ export default function Register() {
   const [verifyCode, setVerifyCode] = useState<string | null>(null);
   const [registerResult, setRegisterResult] = useState<boolean>(false);
 
-  const setStateToVerifyOTP = async () => {
+  const setStateToVerifyOTP = async (payload: IRegisterRequest) => {
     try {
       setLoading(true)
-      const { data } = await sendUserInfoAPI(userInfo)
+      const { data } = await sendUserInfoAPI(payload)
       setVerifyCode(data.verify_code)
       setRegisterStep(RegisterSteps.VERIFY_OTP)
     } catch(e) {
