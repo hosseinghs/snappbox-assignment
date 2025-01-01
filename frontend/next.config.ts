@@ -48,6 +48,9 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  experimental: {
+    authInterrupts: true,
+  }
 };
 
 // ANALYZE=true pnpm build

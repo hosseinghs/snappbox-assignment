@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { unauthorized } from 'next/navigation'
 import { getAccessToken } from "@/cookie";
 import { getGlobalNotifyHandler } from "@/context/NotifyContext";
 
@@ -32,6 +33,9 @@ apiCaller.interceptors.response.use(
       "Something went wrong. Please try again later.";
 
     showError(message);
+
+    if (error.response?.status === 401) unauthorized();
+
     return Promise.reject(error);
   }
 );
