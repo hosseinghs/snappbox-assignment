@@ -22,7 +22,7 @@ interface IProps<T> {
   onRowSelect: (row: T, isSelected: boolean) => void;
 }
 
-export default function TableNestedRow<T>({
+export default function TableNestedRow<T extends { children?: T[] }>({
   row,
   cols,
   isSelected,

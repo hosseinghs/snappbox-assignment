@@ -4,12 +4,20 @@ import {
     TableCell,
     TableHead,
   } from "@mui/material";
-export default function TableHeader({
+import type { IColumn } from "./type";
+interface IProps<T> {
+  columns: IColumn<T>[];
+  hasCheckbox?: boolean;
+  handleSelectAll: () => void;
+  areAllRowsSelected: boolean;
+}
+
+export default function TableHeader<T>({
     columns,
     hasCheckbox,
     handleSelectAll,
     areAllRowsSelected,
-}) {
+}: IProps<T>) {
     return (
         <TableHead>
           <TableRow>

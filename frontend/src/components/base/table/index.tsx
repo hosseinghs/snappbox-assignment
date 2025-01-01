@@ -3,18 +3,15 @@ import { useState, useEffect } from "react";
 import {
   Paper,
   Table,
-  TableRow,
-  TableBody,
-  TableCell,
   TableContainer,
 } from "@mui/material";
 
+import TableBody from "./TableBody";
 import TableHeader from './TableHeader';
 import TableLoading from "./TableLoading";
-import TableNestedRow from "./TableNestedRow";
 import type { ITableProps } from "./type";
 
-export default function BaseTable<T>({
+export default function BaseTable<T extends { children?: T[] }>({
   rows,
   loading,
   columns,
@@ -24,7 +21,6 @@ export default function BaseTable<T>({
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
   const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
 
-  // Recursively select/deselect rows and their children
   const handleRowSelect = (row: T, isSelected: boolean) => {
     const updateSelection = (row: T) => {
       setSelectedRows((prevSelectedRows) => {
@@ -45,7 +41,6 @@ export default function BaseTable<T>({
     updateSelection(row);
   };
 
-  // Update "Select All" checkbox state
   useEffect(() => {
     const allTopLevelRowsSelected = rows.every((row) =>
       selectedRows.some(
@@ -58,11 +53,8 @@ export default function BaseTable<T>({
     setAreAllRowsSelected(allTopLevelRowsSelected);
   }, [selectedRows, rows]);
 
-  // Notify the parent component about selected rows
   useEffect(() => {
-    if (onSelectionChange) {
-      onSelectionChange(selectedRows);
-    }
+    if (onSelectionChange) onSelectionChange(selectedRows);
   }, [selectedRows, onSelectionChange]);
 
   const handleSelectAll = () => {
@@ -85,28 +77,8 @@ export default function BaseTable<T>({
   return (
     <TableContainer component={Paper}>
       <Table>
-        <TableHeader columns={columns} hasCheckbox={hasCheckbox} handleSelectAll={handleSelectAll} areAllRowsSelected={areAllRowsSelected} />
-        <TableBody>
-          {rows?.length > 0 ? (
-            rows.map((row, i: number) => (
-              <TableNestedRow<T>
-                key={i}
-                row={row}
-                cols={columns}
-                isSelected={selectedRows.includes(row)}
-                hasCheckbox={hasCheckbox}
-                onRowSelect={handleRowSelect}
-                selectedRows={selectedRows}
-              />
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length + (hasCheckbox ? 1 : 0)} align="center">
-                No data
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
+        <TableHeader<T> columns={columns} hasCheckbox={hasCheckbox} handleSelectAll={handleSelectAll} areAllRowsSelected={areAllRowsSelected} />
+        <TableBody<T> rows={rows} columns={columns} selectedRows={selectedRows} handleRowSelect={handleRowSelect} hasCheckbox={hasCheckbox} />
       </Table>
     </TableContainer>
   );
