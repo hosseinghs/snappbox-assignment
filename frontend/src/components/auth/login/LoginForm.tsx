@@ -1,9 +1,5 @@
 'use client'
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import { CircularProgress } from '@mui/material';
+import { Box, Button, Grid, CircularProgress, TextField } from '@mui/material';
 
 import { useState } from 'react';
 import { loginAPI } from '@/services/auth';
