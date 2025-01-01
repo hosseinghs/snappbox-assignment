@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const nextConfig: NextConfig = {
   async rewrites() {
@@ -49,4 +50,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// ANALYZE=true pnpm build
+export default withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})(nextConfig);
