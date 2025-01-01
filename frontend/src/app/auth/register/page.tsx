@@ -9,6 +9,7 @@ import type { IRegisterRequest } from '@/services/auth/register-request'
 
 const FirstStepRegister = dynamic(() => import('@/components/auth/register/RegisterForm')) 
 const SecondStepRegister = dynamic(() => import('@/components/auth/register/VerifyOTP')) 
+const LastStepRegister = dynamic(() => import('@/components/auth/register/RegisterResult')) 
 
 enum RegisterSteps {
   REGISTER = 1,
@@ -82,8 +83,6 @@ export default function Register() {
     }
   }
 
-  const renderRegisterResult = () => registerResult ? <div>u r about to be redirected to login page :)</div> : <div>try again :(</div> 
-
   return (
     <div style={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' } }>
       {state === RegisterSteps.REGISTER && (
@@ -95,7 +94,7 @@ export default function Register() {
         />
       )}
       {state === RegisterSteps.VERIFY_OTP && <SecondStepRegister loading={loading} onCompleteOTP={() => handleOTPVerification()} resendOTP={() => handleResendOTP()} />}
-      {state === RegisterSteps.RESULT && renderRegisterResult()}
+      {state === RegisterSteps.RESULT && <LastStepRegister success={registerResult} />}
     </div>
   );
 }
