@@ -1,0 +1,13 @@
+header { 
+    padding: 1.25rem 1rem;
+    background-color: #666666;
+}
+
+a.header__link {
+    color: #ffffff;
+    padding: 4px 12px;
+}
+
+a.header__link:hover {
+    color: #222222;
+}

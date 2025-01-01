@@ -12,4 +12,4 @@ export const setAccessToken = (token: string): void => {
 };
 
 export const getAccessToken = (): string | undefined => Cookies.get(TOKEN_NAME);
-export const removeRefreshToken = (): void => Cookies.remove(TOKEN_NAME)
+export const removeAccessToken = (): void => Cookies.remove(TOKEN_NAME)
