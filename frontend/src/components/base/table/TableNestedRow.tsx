@@ -18,8 +18,8 @@ interface IProps<T> {
   cols?: IColumn<T>[];
   isSelected: boolean;
   hasCheckbox?: boolean;
-  selectedRows: T[];  // Pass selected rows to handle recursive selection
-  onRowSelect: (row: T, isSelected: boolean) => void;  // Updated to include selection state
+  selectedRows: T[];
+  onRowSelect: (row: T, isSelected: boolean) => void;
 }
 
 export default function TableNestedRow<T>({
@@ -31,7 +31,15 @@ export default function TableNestedRow<T>({
   onRowSelect,
 }: IProps<T>) {
   const [open, setOpen] = useState(false);
+  const [rowData, setRowData] = useState<T>(row);
   const [editMode, setEditMode] = useState(false);
+
+  const handleValueChange = (key: keyof T, value: string) => {
+    if (value) setRowData((prev) => ({
+      ...prev,
+      [key]: value, 
+    }));
+  };
 
   return (
     <>
@@ -40,47 +48,55 @@ export default function TableNestedRow<T>({
           <TableCell>
             <Checkbox
               checked={isSelected}
-              onChange={() => onRowSelect(row, !isSelected)}
+              onChange={() => onRowSelect(rowData, !isSelected)}
             />
           </TableCell>
         )}
-        {cols?.length && cols.map((col) => (
-          <TableCell key={col.key}>
-            {col.collapseParent && row.children && (
-              <IconButton style={{ width: '10%', marginRight: '4px' }} onClick={() => setOpen(!open)}>
-                {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-              </IconButton>
-            )}
-            {editMode && ['commission_normal', 'commission_promotion'].includes(col.key) ? (
-              <CommissionInput  />
-            ) : col.formatter ? (
-              col.formatter(row)
-            ) : (
-              row[col.key]
-            )}
-          </TableCell>
-        ))}
+        {cols?.length &&
+          cols.map((col) => (
+            <TableCell key={col.key}>
+              {col.collapseParent && rowData.children && (
+                <IconButton
+                  style={{ width: "10%", marginRight: "4px" }}
+                  onClick={() => setOpen(!open)}
+                >
+                  {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                </IconButton>
+              )}
+              {editMode &&
+              ["commission_normal", "commission_promotion"].includes(col.key) ? (
+                <CommissionInput
+                  value={rowData[col.key]}
+                  onValueChange={(value) => handleValueChange(col.key, value)}
+                />
+              ) : col.formatter ? (
+                col.formatter(rowData)
+              ) : (
+                rowData[col.key]
+              )}
+            </TableCell>
+          ))}
         <TableCell>
           <Button onClick={() => setEditMode(!editMode)}>
             {editMode ? <Check /> : <Edit />}
           </Button>
         </TableCell>
       </TableRow>
-      {row.children && (
+      {rowData.children && (
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Table size="small" aria-label="nested table">
                 <TableBody>
-                  {row.children.map((child: T, index: number) => (
+                  {rowData.children.map((child: T, index: number) => (
                     <TableNestedRow
                       key={index}
                       hasCheckbox={hasCheckbox}
                       row={child}
                       cols={cols}
                       onRowSelect={onRowSelect}
-                      isSelected={selectedRows.includes(child)}  // Recursively pass selection state
-                      selectedRows={selectedRows}  // Pass selected rows to children
+                      isSelected={selectedRows.includes(child)}
+                      selectedRows={selectedRows} 
                     />
                   ))}
                 </TableBody>
