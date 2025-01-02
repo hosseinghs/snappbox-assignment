@@ -10,7 +10,7 @@ type ITableBodyProps<T> = ITableProps<T> & {
     addOrRemoveSubCategory: (row: T) => void;
 }
 
-export default function TableBody<T>({ 
+export default function TableBody<T extends { children?: T[] }>({ 
     rows,
     columns,
     hasCheckbox,

@@ -11,4 +11,5 @@ export interface ITableProps<T> {
     loading?: boolean;
     hasCheckbox?: boolean;
     onSelectionChange?: (selectedRows: T[]) => void;
+    addOrRemoveSubCategory: (row: T) => void;
 }
