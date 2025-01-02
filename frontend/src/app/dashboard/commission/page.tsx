@@ -96,7 +96,7 @@ export default function CommissionPage() {
       formatter: (row) => `${row.commission_promotion}%`
     },
     {
-      key: '',
+      key: 'table-action',
       label: 'edit'
     },
   ]

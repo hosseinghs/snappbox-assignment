@@ -79,13 +79,16 @@ export default function TableNestedRow<T extends { children?: T[] }>({
               ) : (
                 rowData[col.key]
               )}
-            </TableCell>
-          ))}
-        <TableCell>
+
+              { col.key === 'table-action' &&  <TableCell>
           <Button onClick={() => setEditMode(!editMode)}>
             {editMode ? <Check /> : <Edit />}
           </Button>
-        </TableCell>
+        </TableCell> }
+
+            </TableCell>
+          ))}
+       
       </TableRow>
       {rowData.children && (
         <TableRow>
