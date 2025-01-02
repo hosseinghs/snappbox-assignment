@@ -1,3 +1,4 @@
+'use client'
 import LoginForm from "@/components/auth/login/LoginForm"
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
