@@ -43,23 +43,38 @@ export default function CommissionPage() {
   const toggleSubCategoryItemsIntoCategoryItem = (row: ICommission): void => {
     const updatedCommissions = [...nestedCommissions];
 
-    const targetCategory = updatedCommissions.find(item => item.id === row.id);
-    if (!targetCategory) return
-      // If the target category already has children, reset its children to empty
-      if (targetCategory.children.length) targetCategory.children = []; // Clear out the children
-      else {
-        // Otherwise, add subcategories to the target category
-        flatCommissions.forEach(item => {
-          if (item.parent_id === row.id) targetCategory.children.push(item); // Add subcategory to the target category's children
-        });
-      }
+    // Recursive function to find the target category in the nested structure
+    const findAndToggleCategory = (categories: NestedCommission[]): boolean => {
+        for (const category of categories) {
+            if (category.id === row.id) {
+                // If the target category already has children, reset its children to empty
+                if (category.children.length) {
+                    category.children = []; // Clear out the children
+                } else {
+                    // Otherwise, add subcategories to the target category
+                    flatCommissions.forEach(item => {
+                        if (item.parent_id === row.id) {
+                            category.children.push({ ...item, children: [], hasChildren: false });
+                        }
+                    });
+                }
+                return true; // Found and updated the category
+            }
 
+            // If not found at this level, search deeper recursively
+            if (category.children.length) {
+                const found = findAndToggleCategory(category.children);
+                if (found) return true;
+            }
+        }
+        return false; // Not found in this branch
+    };
+    // Start searching and toggling from the top-level categories
+    findAndToggleCategory(updatedCommissions);
     setNestedCommissions(updatedCommissions);
-    console.log(updatedCommissions);
-  }
+};
 
   const handleSelectionChange = (newSelection: ICommission[]) => {
-    console.log(newSelection);
     setSelectedRows(newSelection);
   };
 

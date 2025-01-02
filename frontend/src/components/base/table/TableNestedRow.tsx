@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Table,
-  Button,
   Checkbox,
   Collapse,
   TableRow,
@@ -57,7 +56,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
         {cols?.length &&
           cols.map((col) => (
             <TableCell align="center" key={col.key}>
-              {col.collapseParent && rowData.hasChildren && (
+              {col.collapseParent && (
                 <IconButton
                   style={{ width: "10%", marginRight: "4px" }}
                   onClick={() => {
