@@ -47,7 +47,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
     <>
       <TableRow>
         {hasCheckbox && (
-          <TableCell>
+          <TableCell align="center">
             <Checkbox
               checked={isSelected}
               onChange={() => onRowSelect(rowData, !isSelected)}
@@ -56,7 +56,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
         )}
         {cols?.length &&
           cols.map((col) => (
-            <TableCell key={col.key}>
+            <TableCell align="center" key={col.key}>
               {col.collapseParent && rowData.hasChildren && (
                 <IconButton
                   style={{ width: "10%", marginRight: "4px" }}
@@ -80,11 +80,13 @@ export default function TableNestedRow<T extends { children?: T[] }>({
                 rowData[col.key]
               )}
 
-              { col.key === 'table-action' &&  <TableCell>
-          <Button onClick={() => setEditMode(!editMode)}>
-            {editMode ? <Check /> : <Edit />}
-          </Button>
-        </TableCell> }
+              { col.key === 'table-action' &&
+                <TableCell align="center">
+                  <Button onClick={() => setEditMode(!editMode)}>
+                    {editMode ? <Check /> : <Edit />}
+                  </Button>
+                </TableCell>
+              }
 
             </TableCell>
           ))}

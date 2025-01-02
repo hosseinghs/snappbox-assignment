@@ -22,7 +22,7 @@ export default function TableHeader<T>({
         <TableHead>
           <TableRow>
             {hasCheckbox && (
-              <TableCell>
+              <TableCell align="center">
                 <Checkbox
                   checked={areAllRowsSelected}
                   onChange={handleSelectAll}
@@ -30,7 +30,7 @@ export default function TableHeader<T>({
               </TableCell>
             )}
             {columns.map((col) => (
-              <TableCell key={col.key}>
+              <TableCell align="center" key={col.key}>
                 {col.label}
               </TableCell>
             ))}
