@@ -11,7 +11,8 @@ export default function BaseTable<T extends { children?: T[] }>({
   loading,
   columns,
   hasCheckbox,
-  onSelectionChange
+  onSelectionChange,
+  addOrRemoveSubCategory,
 }: ITableProps<T>) {
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
   const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
@@ -69,7 +70,7 @@ export default function BaseTable<T extends { children?: T[] }>({
     <TableContainer component={Paper}>
       <Table>
         <TableHeader<T> columns={columns} hasCheckbox={hasCheckbox} handleSelectAll={handleSelectAll} areAllRowsSelected={areAllRowsSelected} />
-        <TableBody<T> rows={rows} columns={columns} selectedRows={selectedRows} handleRowSelect={handleRowSelect} hasCheckbox={hasCheckbox} />
+        <TableBody<T> addOrRemoveSubCategory={addOrRemoveSubCategory} rows={rows} columns={columns} selectedRows={selectedRows} handleRowSelect={handleRowSelect} hasCheckbox={hasCheckbox} />
       </Table>
     </TableContainer>
   );

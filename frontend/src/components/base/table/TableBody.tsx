@@ -7,6 +7,7 @@ import type { ITableProps } from "./type";
 type ITableBodyProps<T> = ITableProps<T> & {
     selectedRows: T[];
     handleRowSelect: (row: T, isSelected: boolean) => void;
+    addOrRemoveSubCategory: (row: T) => void;
 }
 
 export default function TableBody<T>({ 
@@ -15,6 +16,7 @@ export default function TableBody<T>({
     hasCheckbox,
     selectedRows,
     handleRowSelect,
+    addOrRemoveSubCategory
 }: ITableBodyProps<T>) {
     return(
         <MuiTableBody>
@@ -28,6 +30,7 @@ export default function TableBody<T>({
                 hasCheckbox={hasCheckbox}
                 onRowSelect={handleRowSelect}
                 selectedRows={selectedRows}
+                handleSubCategoryData={row => addOrRemoveSubCategory(row)}
               />
             ))
           ) : <TableEmptyState />}

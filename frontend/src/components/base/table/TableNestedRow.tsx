@@ -20,6 +20,7 @@ interface IProps<T> {
   hasCheckbox?: boolean;
   selectedRows: T[];
   onRowSelect: (row: T, isSelected: boolean) => void;
+  handleSubCategoryData?: (data: T) => void;
 }
 
 export default function TableNestedRow<T extends { children?: T[] }>({
@@ -29,6 +30,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
   hasCheckbox,
   selectedRows,
   onRowSelect,
+  handleSubCategoryData,
 }: IProps<T>) {
   const [open, setOpen] = useState(false);
   const [rowData, setRowData] = useState<T>(row);
@@ -55,10 +57,13 @@ export default function TableNestedRow<T extends { children?: T[] }>({
         {cols?.length &&
           cols.map((col) => (
             <TableCell key={col.key}>
-              {col.collapseParent && rowData.children && (
+              {col.collapseParent && rowData.hasChildren && (
                 <IconButton
                   style={{ width: "10%", marginRight: "4px" }}
-                  onClick={() => setOpen(!open)}
+                  onClick={() => {
+                    handleSubCategoryData(rowData)
+                    setOpen(!open)
+                  }}
                 >
                   {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                 </IconButton>
