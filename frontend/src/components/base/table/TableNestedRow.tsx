@@ -8,8 +8,11 @@ import {
   TableBody,
   IconButton,
 } from "@mui/material";
+
+import CustomPopup from "@/components/base/CustomPopup";
 import CommissionInput from "@/components/commission/CommissionInput";
-import { KeyboardArrowDown, KeyboardArrowUp, Edit, Check } from "@mui/icons-material";
+import { KeyboardArrowDown, KeyboardArrowUp, Edit, Check, Delete } from "@mui/icons-material";
+
 import type { IColumn } from "./type";
 
 interface IProps<T> {
@@ -34,6 +37,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
   const [open, setOpen] = useState(false);
   const [rowData, setRowData] = useState<T>(row);
   const [editMode, setEditMode] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleValueChange = (key: keyof T, value: string) => {
     if (value) setRowData((prev) => ({
@@ -41,6 +45,11 @@ export default function TableNestedRow<T extends { children?: T[] }>({
       [key]: value,
     }));
   };
+
+
+  const deleteRow = data => {
+    console.log("data", data);
+  }
 
   return (
     <>
@@ -80,12 +89,29 @@ export default function TableNestedRow<T extends { children?: T[] }>({
               )}
 
               {col.key === "table-action" && (
-                <IconButton
-                  style={{ width: "10%", marginRight: "4px" }}
-                  onClick={() => setEditMode(!editMode)}
-                >
-                  {editMode ? <Check /> : <Edit />}
-                </IconButton>
+                <div className="flex justify-center items-center">
+                  <IconButton
+                    style={{ width: "10%", marginRight: "4px" }}
+                    onClick={() => setEditMode(!editMode)}
+                  >
+                    {editMode ? <Check /> : <Edit />}
+                  </IconButton>
+                 
+                 <CustomPopup
+                    open={showPopup}
+                    message="are u sure u want to procced?"
+                    onClose={() => setShowPopup(false)}
+                    onConfirm={() => deleteRow(rowData)}
+                  >
+                     <IconButton
+                      style={{ width: "10%", marginRight: "4px" }}
+                      onClick={() => setShowPopup(true)}
+                      >
+                        <Delete />
+                      </IconButton>
+                 </CustomPopup>
+                
+                </div>
               )}
             </TableCell>
           ))}
