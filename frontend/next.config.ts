@@ -53,7 +53,7 @@ const nextConfig: NextConfig = {
   }
 };
 
-// ANALYZE=true pnpm build
+// ANALYZE=true yarn build
 export default withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })(nextConfig);
