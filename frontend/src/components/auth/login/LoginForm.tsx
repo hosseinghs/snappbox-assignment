@@ -1,37 +1,20 @@
 'use client'
 import { Box, Button, Grid, CircularProgress, TextField } from '@mui/material';
 
-import { useState } from 'react';
-import { loginAPI } from '@/services/auth';
-import { useRouter } from 'next/navigation';
-import { setAccessToken } from '@/cookie';
 import { useForm, SubmitHandler } from "react-hook-form"
 
 import { EMAIL_REGEX } from '@/utils/validations';
+import type { ILoginForm } from '@/services/auth/register-request'
 
-interface IForm {
-    email: string
-    password: string
+interface Iprops {
+  loading: boolean;
+  submit: (payload: ILoginForm) => void
 }
 
-export default function LoginForm() {
-    const { register, handleSubmit, formState: { errors } } = useForm<IForm>()
+export default function LoginForm({ submit, loading }: Iprops) {
+    const { register, handleSubmit, formState: { errors } } = useForm<ILoginForm>()
   
-    const onSubmit: SubmitHandler<IForm> = (data) => login(data)
-   
-    const router = useRouter()
-    const [loading, setLoading] = useState<boolean>(false)
-    // todo: call login outside this component
-    async function login(payload: IForm) {
-        try {
-            setLoading(true)
-            const { data } = await loginAPI(payload)
-            setAccessToken(data.access_token)
-            router.push('/dashboard/commission')
-        } finally {
-            setLoading(false)
-        }
-    }
+    const onSubmit: SubmitHandler<ILoginForm> = (data) => submit(data)
 
     return (
         <Box
@@ -69,12 +52,11 @@ export default function LoginForm() {
           </Grid>
 
           <Grid item xs={12}>
-          <Button variant='contained' type="submit" onClick={handleSubmit(onSubmit)}>
-            {loading ? <CircularProgress size="25px" /> : 'Login'}
-          </Button>
+            <Button variant='contained' type="submit" onClick={handleSubmit(onSubmit)}>
+              {loading ? <CircularProgress size="25px" /> : 'Login'}
+            </Button>
+          </Grid>
         </Grid>
-        </Grid>
-        
       </Box>
     )
 }
