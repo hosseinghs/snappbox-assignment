@@ -39,7 +39,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
   const handleValueChange = (key: keyof T, value: string) => {
     if (value) setRowData((prev) => ({
       ...prev,
-      [key]: value, 
+      [key]: value,
     }));
   };
 
@@ -61,8 +61,8 @@ export default function TableNestedRow<T extends { children?: T[] }>({
                 <IconButton
                   style={{ width: "10%", marginRight: "4px" }}
                   onClick={() => {
-                    handleSubCategoryData(rowData)
-                    setOpen(!open)
+                    handleSubCategoryData(rowData);
+                    setOpen(!open);
                   }}
                 >
                   {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
@@ -79,22 +79,19 @@ export default function TableNestedRow<T extends { children?: T[] }>({
               ) : (
                 rowData[col.key]
               )}
-
-              { col.key === 'table-action' &&
-                <TableCell align="center">
-                  <Button onClick={() => setEditMode(!editMode)}>
-                    {editMode ? <Check /> : <Edit />}
-                  </Button>
-                </TableCell>
-              }
-
             </TableCell>
           ))}
-       
+        <TableCell align="center">
+          <Button onClick={() => setEditMode(!editMode)}>
+            {editMode ? <Check /> : <Edit />}
+          </Button>
+        </TableCell>
       </TableRow>
+
+      {/* Render nested rows in a separate TableRow */}
       {rowData.children && (
         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
+          <TableCell colSpan={cols?.length || 3} style={{ paddingBottom: 0, paddingTop: 0 }}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Table size="small" aria-label="nested table">
                 <TableBody>
@@ -106,7 +103,8 @@ export default function TableNestedRow<T extends { children?: T[] }>({
                       cols={cols}
                       onRowSelect={onRowSelect}
                       isSelected={selectedRows.includes(child)}
-                      selectedRows={selectedRows} 
+                      selectedRows={selectedRows}
+                      handleSubCategoryData={handleSubCategoryData}
                     />
                   ))}
                 </TableBody>
