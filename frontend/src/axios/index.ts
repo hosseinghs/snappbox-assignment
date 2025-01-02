@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { unauthorized } from 'next/navigation'
 import { getAccessToken } from "@/cookie";
-import { getGlobalNotifyHandler } from "@/context/NotifyContext";
+import { getGlobalNotifyHandler } from "@/context/notify-context";
 
 // Create an Axios instance
 const apiCaller = axios.create({

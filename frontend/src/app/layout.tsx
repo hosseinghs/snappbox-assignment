@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { NotifyProvider } from "@/context/NotifyContext";
-
-import Header from "@/components/layout/Header";
+import { NotifyProvider } from "@/context/notify-context";
+import AppWrapper from "@/components/layout/AppWrapper";
 import ErrorBoundary from "@/components/base/ErrorBoundary";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,10 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ErrorBoundary >
-          <Header />
-          <main>
-            {children}
-          </main>
+          <AppWrapper>{children}</AppWrapper>
         </ErrorBoundary>
         <NotifyProvider/>
       </body>
