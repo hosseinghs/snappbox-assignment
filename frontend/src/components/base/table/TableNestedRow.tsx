@@ -79,13 +79,18 @@ export default function TableNestedRow<T extends { children?: T[] }>({
               ) : (
                 rowData[col.key]
               )}
+
+              {col.key === "table-action" && (
+                <IconButton
+                  style={{ width: "10%", marginRight: "4px" }}
+                  onClick={() => setEditMode(!editMode)}
+                >
+                  {editMode ? <Check /> : <Edit />}
+                </IconButton>
+              )}
             </TableCell>
           ))}
-        <TableCell align="center">
-          <Button onClick={() => setEditMode(!editMode)}>
-            {editMode ? <Check /> : <Edit />}
-          </Button>
-        </TableCell>
+        
       </TableRow>
 
       {/* Render nested rows in a separate TableRow */}
