@@ -16,7 +16,6 @@ export default function TableBody<T extends { children?: T[] }>({
     hasCheckbox,
     selectedRows,
     handleRowSelect,
-    onEditCommission,
     addOrRemoveSubCategory
 }: ITableBodyProps<T>) {
     return(
@@ -31,7 +30,6 @@ export default function TableBody<T extends { children?: T[] }>({
                 hasCheckbox={hasCheckbox}
                 onRowSelect={handleRowSelect}
                 selectedRows={selectedRows}
-                onEditCommission={onEditCommission}
                 handleSubCategoryData={row => addOrRemoveSubCategory(row)}
               />
             ))

@@ -11,7 +11,6 @@ export default function BaseTable<T extends { children?: T[] }>({
   loading,
   columns,
   hasCheckbox,
-  onEditCommission,
   onSelectionChange,
   addOrRemoveSubCategory,
 }: ITableProps<T>) {
@@ -20,10 +19,11 @@ export default function BaseTable<T extends { children?: T[] }>({
   const selectedRowsRef = useRef<Map<T, boolean>>(new Map());
 
   const flattenedRows = useMemo(() => {
-    const flattenRows = (rows: T[]) => {
-      return rows.reduce((acc: T[], row) => {
-        acc.push(row);
-        if (row.children) acc.push(...flattenRows(row.children));
+    const flattenRows = (rows: T[], parentPath: string = "") => {
+      return rows.reduce((acc: T[], row, index) => {
+        const rowPath = `${parentPath}${parentPath ? "." : ""}${index}`;
+        acc.push({ ...row, rowPath });  // Add path to the row
+        if (row.children) acc.push(...flattenRows(row.children, rowPath));
         return acc;
       }, []);
     };
@@ -64,13 +64,14 @@ export default function BaseTable<T extends { children?: T[] }>({
       setSelectedRows(flattenedRows);
     }
   }, [flattenedRows, areAllRowsSelected]);
+
   if (loading) return <TableLoading />;
 
   return (
     <TableContainer component={Paper}>
       <Table>
         <TableHeader<T> columns={columns} hasCheckbox={hasCheckbox} handleSelectAll={handleSelectAll} areAllRowsSelected={areAllRowsSelected} />
-        <TableBody<T> onEditCommission={onEditCommission} addOrRemoveSubCategory={addOrRemoveSubCategory} rows={rows} columns={columns} selectedRows={selectedRows} handleRowSelect={handleRowSelect} hasCheckbox={hasCheckbox} />
+        <TableBody<T> addOrRemoveSubCategory={addOrRemoveSubCategory} rows={rows} columns={columns} selectedRows={selectedRows} handleRowSelect={handleRowSelect} hasCheckbox={hasCheckbox} />
       </Table>
     </TableContainer>
   );

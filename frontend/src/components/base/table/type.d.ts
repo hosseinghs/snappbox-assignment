@@ -2,6 +2,7 @@ export interface IColumn<T> {
     key: string; 
     label: string;
     collapseParent?: boolean;
+    render?: (row: T) => React.ReactNode;
     formatter?: (val: T) => string 
 }
 
