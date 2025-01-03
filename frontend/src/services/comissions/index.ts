@@ -7,14 +7,14 @@ export const getAllCommissionsAPI = async (): Promise<{ data: ICommission[] }> =
     return await apiCaller.get(BASE_SCOPE_URL) 
 } 
 
-export const createComissionAPI = async (payload) => {
+export const createComissionAPI = async (payload: ICommission) => {
     return await apiCaller.post(BASE_SCOPE_URL, payload) 
 } 
 
-export const updateComissionByIdAPI = async (payload) => {
-    return await apiCaller.put(BASE_SCOPE_URL, payload) 
+export const updateComissionByIdAPI = async (payload: ICommission) => {
+    return await apiCaller.post(`${BASE_SCOPE_URL}/update`, payload) 
 } 
 
-export const deleteCommissionByIdAPI = async (id) => {
+export const deleteCommissionByIdAPI = async (id: number) => {
     return await apiCaller.delete(`${BASE_SCOPE_URL}/${id}`) 
 } 
