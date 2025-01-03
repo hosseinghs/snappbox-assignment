@@ -84,17 +84,20 @@ export default function Register() {
   }
 
   return (
-    <div style={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' } }>
-      {state === RegisterSteps.REGISTER && (
-        <FirstStepRegister
-          submit={handleSubmit(onSubmit)}
-          errors={errors}
-          loading={loading}
-          register={register}
-        />
-      )}
-      {state === RegisterSteps.VERIFY_OTP && <SecondStepRegister loading={loading} onCompleteOTP={() => handleOTPVerification()} resendOTP={() => handleResendOTP()} />}
-      {state === RegisterSteps.RESULT && <LastStepRegister success={registerResult} />}
+    <div className="text-center">
+      <div>Register Forms</div>
+      <div className="flex items-start justify-center">
+        {state === RegisterSteps.REGISTER && (
+          <FirstStepRegister
+            submit={handleSubmit(onSubmit)}
+            errors={errors}
+            loading={loading}
+            register={register}
+          />
+        )}
+        {state === RegisterSteps.VERIFY_OTP && <SecondStepRegister loading={loading} onCompleteOTP={() => handleOTPVerification()} resendOTP={() => handleResendOTP()} />}
+        {state === RegisterSteps.RESULT && <LastStepRegister success={registerResult} />}
+      </div>
     </div>
   );
 }
