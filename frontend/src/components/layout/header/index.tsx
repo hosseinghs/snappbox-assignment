@@ -1,11 +1,8 @@
-'use client'
-import './style.css'
 import Nav from './Nav'
 
 export default function Header() {
-
     return(
-        <header>
+        <header className='px-4 py-5 bg-slate-200'>
             <Nav />
         </header>
     )

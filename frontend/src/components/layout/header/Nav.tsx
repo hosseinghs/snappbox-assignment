@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import AuthContext from '@/context/auth-context'
+
+import { Button } from '@mui/material'
 import { useContext } from 'react'
 import { removeAccessToken } from '@/cookie'
 
@@ -15,8 +17,12 @@ export default function Nav() {
     const notLoggedInComponent = () => {
         return (
             <>
-            <Link className='header__link' href="/auth/login">Login</Link>
-            <Link className='header__link' href="/auth/register">Register</Link>
+            <Button variant='contained' color='primary' className='w-auto'>
+                <Link href="/auth/login">Login</Link>
+            </Button>
+            <Button variant='outlined' color='primary' className='w-auto ml-4'>
+                <Link href="/auth/register">Register</Link>
+            </Button>
             </>
         )
     } 
