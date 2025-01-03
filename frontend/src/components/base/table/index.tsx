@@ -11,6 +11,7 @@ export default function BaseTable<T extends { children?: T[] }>({
   loading,
   columns,
   hasCheckbox,
+  onEditCommission,
   onSelectionChange,
   addOrRemoveSubCategory,
 }: ITableProps<T>) {
@@ -70,7 +71,7 @@ export default function BaseTable<T extends { children?: T[] }>({
     <TableContainer component={Paper}>
       <Table>
         <TableHeader<T> columns={columns} hasCheckbox={hasCheckbox} handleSelectAll={handleSelectAll} areAllRowsSelected={areAllRowsSelected} />
-        <TableBody<T> addOrRemoveSubCategory={addOrRemoveSubCategory} rows={rows} columns={columns} selectedRows={selectedRows} handleRowSelect={handleRowSelect} hasCheckbox={hasCheckbox} />
+        <TableBody<T> onEditCommission={onEditCommission} addOrRemoveSubCategory={addOrRemoveSubCategory} rows={rows} columns={columns} selectedRows={selectedRows} handleRowSelect={handleRowSelect} hasCheckbox={hasCheckbox} />
       </Table>
     </TableContainer>
   );

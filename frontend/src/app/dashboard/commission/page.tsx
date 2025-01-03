@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 import BaseTable from '@/components/base/table'
-import { getAllCommissionsAPI } from '@/services/comissions';
+import { getAllCommissionsAPI, updateComissionByIdAPI } from '@/services/comissions';
 import type { IColumn } from '@/components/base/table/type';
 import type { ICommission } from '@/services/comissions/type';
 
@@ -90,6 +90,13 @@ export default function CommissionPage() {
     }
   }
 
+  const updateComission = async (row: ICommission) => {
+    try {
+        const res = await updateComissionByIdAPI(row)
+        console.log(res);
+    } finally{}
+  }
+
   useEffect(() => {
     handleGetCommissionsList()
   }, [])
@@ -124,6 +131,7 @@ export default function CommissionPage() {
                 rows={nestedCommissions} 
                 loading={loading}
                 columns={columns}
+                onEditCommission={updateComission}
                 onSelectionChange={handleSelectionChange}
                 addOrRemoveSubCategory={(d) => toggleSubCategoryItemsIntoCategoryItem(d)}
               />

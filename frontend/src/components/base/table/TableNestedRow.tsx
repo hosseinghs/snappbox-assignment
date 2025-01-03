@@ -32,6 +32,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
   hasCheckbox,
   selectedRows,
   onRowSelect,
+  onEditCommission,
   handleSubCategoryData,
 }: IProps<T>) {
   const [open, setOpen] = useState(false);
@@ -42,10 +43,15 @@ export default function TableNestedRow<T extends { children?: T[] }>({
   const handleValueChange = (key: keyof T, value: string) => {
     if (value) setRowData((prev) => ({
       ...prev,
-      [key]: value,
+      [key]: +value,
     }));
   };
 
+
+  const handleEditRow = async (rowData) => {
+    await onEditCommission(rowData)
+    setEditMode(false);
+  }
 
   const deleteRow = data => {
     console.log("data", data);
@@ -92,9 +98,9 @@ export default function TableNestedRow<T extends { children?: T[] }>({
                 <div className="flex justify-center items-center">
                   <IconButton
                     style={{ width: "10%", marginRight: "4px" }}
-                    onClick={() => setEditMode(!editMode)}
+                    
                   >
-                    {editMode ? <Check /> : <Edit />}
+                    {editMode ? <Check onClick={() => handleEditRow(rowData)} /> : <Edit onClick={() => setEditMode(!editMode)} />}
                   </IconButton>
                  
                  <CustomPopup
