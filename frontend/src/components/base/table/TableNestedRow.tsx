@@ -88,7 +88,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
         )}
         {cols?.length &&
           cols.map((col) => (
-            <TableCell align="center" key={col.key}>
+            <TableCell className={col.collapseParent && open ? 'text-blue-500' : ''} align="center" key={col.key}>
               {col.collapseParent && (
                 <TableCellWithToggleBtn isOpen={open} onToggle={handleToggle} />
               )}
