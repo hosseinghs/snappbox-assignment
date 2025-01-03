@@ -1,19 +1,22 @@
 import Link from 'next/link'
 import AuthContext from '@/context/auth-context'
+import { useRouter } from 'next/navigation'
+import { useContext } from 'react'
 
 import { Button } from '@mui/material'
-import { useContext } from 'react'
 import { removeAccessToken } from '@/cookie'
 
 export default function Nav() {
-    const ctx = useContext(AuthContext);
+    const router = useRouter()
+    const ctx = useContext(AuthContext)
     
     const logout = () => {
         removeAccessToken()
         ctx.setIsLoggedIn(false)
+        router.push('/auth/login')
     }
 
-    const loggedInComponent = () => <Link className='header__link' href="#" onClick={() => logout()}>Logout</Link>
+    const loggedInComponent = () => <Button className='w-auto' variant="text" color='warning' onClick={() => logout()}>Logout</Button>
     const notLoggedInComponent = () => {
         return (
             <>
