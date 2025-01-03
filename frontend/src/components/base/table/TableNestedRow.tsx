@@ -22,6 +22,7 @@ interface IProps<T> {
   hasCheckbox?: boolean;
   selectedRows: T[];
   onRowSelect: (row: T, isSelected: boolean) => void;
+  onEditCommission: (rowData: T) => Promise<void>;
   handleSubCategoryData?: (data: T) => void;
 }
 
@@ -48,7 +49,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
   };
 
 
-  const handleEditRow = async (rowData) => {
+  const handleEditRow = async (rowData: T) => {
     await onEditCommission(rowData)
     setEditMode(false);
   }
@@ -137,9 +138,10 @@ export default function TableNestedRow<T extends { children?: T[] }>({
                       hasCheckbox={hasCheckbox}
                       row={child}
                       cols={cols}
-                      onRowSelect={onRowSelect}
                       isSelected={selectedRows.includes(child)}
+                      onRowSelect={onRowSelect}
                       selectedRows={selectedRows}
+                      onEditCommission={onEditCommission}
                       handleSubCategoryData={handleSubCategoryData}
                     />
                   ))}
