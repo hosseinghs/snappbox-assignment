@@ -3,11 +3,12 @@ import { useState, useEffect } from 'react';
 
 import BaseTable from '@/components/base/table'
 import { getAllCommissionsAPI } from '@/services/comissions';
-import type { IColumn } from '@/components/base/table/type';
 import type { ICommission } from '@/services/comissions/type';
+import type { IColumn, ITableAction } from '@/components/base/table/type';
 
 import CommissionInput from '@/components/commission/CommissionInput';
 import CommissionEditAction from '@/components/commission/CommissionEditAction';
+import CommissionDeletePopUp from '@/components/commission/CommissionDeletePopup';
 
 type NestedCommission = ICommission & {
   children: ICommission[];
@@ -16,7 +17,7 @@ type NestedCommission = ICommission & {
 
 interface IUpdateCommission {
   id: number;
-  key: Pick<ICommission, 'commission_normal' | 'commission_promotion'>;
+  key: keyof Pick<ICommission, 'commission_normal' | 'commission_promotion'>;
   value: string;
   parentId: number;
 }
@@ -111,6 +112,7 @@ export default function CommissionPage() {
     setNestedCommissions(updatedCommissions);
   }
 
+
   useEffect(() => {
     handleGetCommissionsList()
   }, [])
@@ -143,8 +145,11 @@ export default function CommissionPage() {
         />
       ),
     },
+  ]
+
+  const tableActions: ITableAction<ICommission>[] = [
     {
-      key: 'table-action',
+      key: 'edit',
       label: 'edit',
       render: (row: ICommission) => (
         <CommissionEditAction
@@ -155,6 +160,11 @@ export default function CommissionPage() {
         />
       ),
     },
+    {
+      key: 'delete',
+      label: 'delete',
+      render: (row: ICommission) => <CommissionDeletePopUp id={row.id} removeCommissionFromList={() => {}} />
+    }
   ]
 
   return (
@@ -165,6 +175,7 @@ export default function CommissionPage() {
                 rows={nestedCommissions} 
                 loading={loading}
                 columns={columns}
+                actions={tableActions}
                 onSelectionChange={handleSelectionChange}
                 addOrRemoveSubCategory={(d) => toggleSubCategoryItemsIntoCategoryItem(d)}
               />

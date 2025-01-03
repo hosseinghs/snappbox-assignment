@@ -7,13 +7,16 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
+import TableLoading from "./TableLoading";
+import TableActionsCell from "./TableActionsCell";
 import TableCellWithToggleBtn from "./TableCellWithToggleBtn";
 
-import type { IColumn } from "./type";
+import type { IColumn, ITableAction } from "./type";
 
 interface IProps<T> {
   row: T;
   cols?: IColumn<T>[]; 
+  actions?: ITableAction<T>[];
   isSelected: boolean;
   hasCheckbox?: boolean;
   selectedRows: T[];
@@ -24,6 +27,7 @@ interface IProps<T> {
 export default function TableNestedRow<T extends { children?: T[] }>({
   row,
   cols,
+  actions,
   isSelected,
   hasCheckbox,
   selectedRows,
@@ -99,6 +103,10 @@ export default function TableNestedRow<T extends { children?: T[] }>({
                 : row[col.key]}
             </TableCell>
           ))}
+
+        {/* Render action buttons */}
+        {actions && actions.length > 0 && <TableActionsCell row={row} actions={actions} />}
+
       </TableRow>
 
       {/* Render nested rows in a scrollable container */}
@@ -120,6 +128,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
                         key={index}
                         row={child}
                         cols={cols}
+                        actions={actions}
                         isSelected={selectedRows.includes(child)}
                         hasCheckbox={hasCheckbox}
                         onRowSelect={onRowSelect}
@@ -127,13 +136,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
                         handleSubCategoryData={handleSubCategoryData}
                       />
                     ))}
-                    {loadingMore && (
-                      <TableRow>
-                        <TableCell colSpan={cols?.length || 3} align="center">
-                          Loading more...
-                        </TableCell>
-                      </TableRow>
-                    )}
+                    {loadingMore && <TableLoading />}
                   </TableBody>
                 </Table>
               </div>

@@ -13,6 +13,7 @@ type ITableBodyProps<T> = ITableProps<T> & {
 export default function TableBody<T extends { children?: T[] }>({ 
     rows,
     columns,
+    actions,
     hasCheckbox,
     selectedRows,
     handleRowSelect,
@@ -26,6 +27,7 @@ export default function TableBody<T extends { children?: T[] }>({
                 key={i}
                 row={row}
                 cols={columns}
+                actions={actions}
                 isSelected={selectedRows.includes(row)}
                 hasCheckbox={hasCheckbox}
                 onRowSelect={handleRowSelect}
