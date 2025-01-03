@@ -19,11 +19,9 @@ export default function BaseTable<T extends { children?: T[] }>({
   const selectedRowsRef = useRef<Map<T, boolean>>(new Map());
 
   const flattenedRows = useMemo(() => {
-    const flattenRows = (rows: T[], parentPath: string = "") => {
-      return rows.reduce((acc: T[], row, index) => {
-        const rowPath = `${parentPath}${parentPath ? "." : ""}${index}`;
-        acc.push({ ...row, rowPath });  // Add path to the row
-        if (row.children) acc.push(...flattenRows(row.children, rowPath));
+    const flattenRows = (rows: T[]) => {
+      return rows.reduce((acc: T[], row) => {
+        if (row.children) acc.push(...flattenRows(row.children));
         return acc;
       }, []);
     };
