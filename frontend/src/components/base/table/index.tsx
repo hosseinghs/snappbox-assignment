@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Paper, Table, TableContainer } from "@mui/material";
 
 import TableBody from "./TableBody";
@@ -45,7 +45,7 @@ export default function BaseTable<T extends { children?: T[] }>({
     if (onSelectionChange) onSelectionChange(selectedRows);
   }, [selectedRows, onSelectionChange]);
 
-  const handleRowSelect = (row: T, isSelected: boolean) => {
+  const handleRowSelect = useCallback((row: T, isSelected: boolean) => {
     if (isSelected) selectedRowsRef.current.set(row, true);
     else selectedRowsRef.current.delete(row);
 
@@ -53,9 +53,9 @@ export default function BaseTable<T extends { children?: T[] }>({
     setSelectedRows(updatedSelectedRows);
 
     if (row.children) row.children.forEach((child) => handleRowSelect(child, isSelected));
-  };
+  }, []);
 
-  const handleSelectAll = () => {
+  const handleSelectAll = useCallback(() => {
     if (areAllRowsSelected) {
       selectedRowsRef.current.clear();
       setSelectedRows([]);
@@ -63,8 +63,7 @@ export default function BaseTable<T extends { children?: T[] }>({
       flattenedRows.forEach((row) => selectedRowsRef.current.set(row, true));
       setSelectedRows(flattenedRows);
     }
-  };
-
+  }, [flattenedRows, areAllRowsSelected]);
   if (loading) return <TableLoading />;
 
   return (
