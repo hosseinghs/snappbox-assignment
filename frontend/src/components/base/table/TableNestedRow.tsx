@@ -114,13 +114,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
         <TableRow>
           <TableCell id="nested__table" colSpan={12} className="p-0">
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <div
-                style={{
-                  maxHeight: "300px", // Adjust this height based on your needs
-                  overflowY: "auto", // Enable vertical scrolling
-                }}
-                ref={tableBodyRef}
-              >
+              <div ref={tableBodyRef} className="overflow-y-auto max-h-[300px]">
                 <Table size="small" aria-label="nested table">
                   <TableBody>
                     {visibleChildren.map((child: T, index: number) => (
