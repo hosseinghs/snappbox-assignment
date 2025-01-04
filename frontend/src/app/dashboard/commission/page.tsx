@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { lazy, useState, useEffect } from 'react';
 
 import BaseTable from '@/components/base/table'
 import { getAllCommissionsAPI } from '@/services/comissions';
@@ -9,6 +9,7 @@ import type { IColumn, ITableAction } from '@/components/base/table/type';
 import CommissionInput from '@/components/commission/CommissionInput';
 import CommissionEditAction from '@/components/commission/CommissionEditAction';
 import CommissionDeletePopUp from '@/components/commission/CommissionDeletePopup';
+const CommissionCreateDialog = lazy(() => import('@/components/commission/CommissionCreateDialog'))
 
 type NestedCommission = ICommission & {
   children: ICommission[];
@@ -179,8 +180,9 @@ export default function CommissionPage() {
   ]
 
   return (
-    <div style={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' } }>
-        <div style={ { width: '80%', margin: '0 auto' }}>
+    <div>
+        <div className='w-3/4 mx-auto'>
+              <CommissionCreateDialog />
               <BaseTable<NestedCommission>
                 hasCheckbox
                 rows={nestedCommissions} 

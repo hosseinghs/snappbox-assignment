@@ -17,7 +17,7 @@ export default function LoginForm({ submit, loading }: Iprops) {
     const onSubmit: SubmitHandler<ILoginForm> = (data) => submit(data)
 
     return (
-        <Box
+      <Box
             component="form"
             sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
             onSubmit={(e) => {
