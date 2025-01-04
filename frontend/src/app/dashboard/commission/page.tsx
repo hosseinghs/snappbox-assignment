@@ -1,5 +1,5 @@
 'use client'
-import { lazy, useState, useEffect } from 'react';
+import { lazy, useState, useEffect, useCallback } from 'react';
 
 import BaseTable from '@/components/base/table'
 import { getAllCommissionsAPI } from '@/services/comissions';
@@ -96,9 +96,10 @@ export default function CommissionPage() {
     findAndToggleCategory(updatedCommissions);
     setNestedCommissions(updatedCommissions);
   };
-  const handleSelectionChange = (newSelection: ICommission[]) => {
+
+  const handleSelectionChange = useCallback((newSelection: ICommission[]) => {
     setSelectedRows(newSelection);
-  };
+  }, []);
 
   const handleGetCommissionsList = async () => {
     try {
