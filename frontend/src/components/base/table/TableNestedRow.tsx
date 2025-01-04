@@ -67,8 +67,6 @@ export default function TableNestedRow<T extends { children?: T[], hasChildren: 
 
   useEffect(() => {
     if (row.children && open) setVisibleChildren(row.children.slice(0, 10));
-    console.log(row);
-    
   }, [row, open]);
 
   useEffect(() => {
@@ -83,63 +81,63 @@ export default function TableNestedRow<T extends { children?: T[], hasChildren: 
 
   return (
     <>
-      <TableRow>
-        {hasCheckbox && (
-          <TableCell align="center">
-            <Checkbox
-              checked={isSelected}
-              onChange={() => onRowSelect(row, !isSelected)}
-            />
-          </TableCell>
-        )}
-        {cols?.length &&
-          cols.map((col) => (
-            <TableCell className={col.collapseParent && open ? 'text-blue-500' : ''} colSpan={1} align="center" key={col.key}>
-              {col.collapseParent && row?.hasChildren && (
-                <TableCellWithToggleBtn isOpen={open} onToggle={handleToggle} />
-              )}
-              {col.render
-                ? col.render(row)
-                : col.formatter
-                ? col.formatter(row)
-                : row[col.key]}
-            </TableCell>
-          ))}
-
-        {/* Render action buttons */}
-        {actions && actions.length > 0 && <TableActionsCell row={row} actions={actions} />}
-
-      </TableRow>
-
-      {/* Render nested rows in a scrollable container */}
-      {row.children && row.children.length > 0 && (
-        <TableRow>
-          <TableCell id="nested__table" colSpan={12} className="p-0">
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <div ref={tableBodyRef} className="overflow-y-auto max-h-[300px]">
-                <Table size="small" aria-label="nested table">
-                  <TableBody>
-                    {visibleChildren.map((child: T, index: number) => (
-                      <TableNestedRow
-                        key={index}
-                        row={child}
-                        cols={cols}
-                        actions={actions}
-                        isSelected={selectedRows.includes(child)}
-                        hasCheckbox={hasCheckbox}
-                        onRowSelect={onRowSelect}
-                        selectedRows={selectedRows}
-                        handleSubCategoryData={handleSubCategoryData}
-                      />
-                    ))}
-                    {loadingMore && <TableLoading />}
-                  </TableBody>
-                </Table>
-              </div>
-            </Collapse>
-          </TableCell>
-        </TableRow>
+    <TableRow className="hover:bg-gray-200">
+      {hasCheckbox && (
+        <TableCell align="center">
+          <Checkbox
+            checked={isSelected}
+            onChange={() => onRowSelect(row, !isSelected)}
+          />
+        </TableCell>
       )}
-    </>
+      {cols?.length &&
+        cols.map((col) => (
+          <TableCell className={col.collapseParent && open ? 'text-blue-500' : ''} colSpan={1} align="center" key={col.key}>
+            {col.collapseParent && row?.hasChildren && (
+              <TableCellWithToggleBtn isOpen={open} onToggle={handleToggle} />
+            )}
+            {col.render
+              ? col.render(row)
+              : col.formatter
+              ? col.formatter(row)
+              : row[col.key]}
+          </TableCell>
+        ))}
+  
+      {/* Render action buttons */}
+      {actions && actions.length > 0 && <TableActionsCell row={row} actions={actions} />}
+    </TableRow>
+  
+    {/* Render nested rows in a scrollable container */}
+    {row.children && row.children.length > 0 && (
+      <TableRow className="bg-gray-100">
+        <TableCell id="nested__table" colSpan={12} className="p-0">
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <div ref={tableBodyRef} className="overflow-y-auto max-h-[300px]">
+              <Table size="small" aria-label="nested table">
+                <TableBody>
+                  {visibleChildren.map((child: T, index: number) => (
+                    <TableNestedRow
+                      key={index}
+                      row={child}
+                      cols={cols}
+                      actions={actions}
+                      isSelected={selectedRows.includes(child)}
+                      hasCheckbox={hasCheckbox}
+                      onRowSelect={onRowSelect}
+                      selectedRows={selectedRows}
+                      handleSubCategoryData={handleSubCategoryData}
+                    />
+                  ))}
+                  {loadingMore && <TableLoading />}
+                </TableBody>
+              </Table>
+            </div>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    )}
+  </>
+  
   );
 }
