@@ -24,7 +24,7 @@ interface IProps<T> {
   handleSubCategoryData: (data: T) => void;
 }
 
-export default function TableNestedRow<T extends { children?: T[] }>({
+export default function TableNestedRow<T extends { children?: T[], hasChildren: boolean }>({
   row,
   cols,
   actions,
@@ -67,6 +67,8 @@ export default function TableNestedRow<T extends { children?: T[] }>({
 
   useEffect(() => {
     if (row.children && open) setVisibleChildren(row.children.slice(0, 10));
+    console.log(row);
+    
   }, [row, open]);
 
   useEffect(() => {
@@ -93,7 +95,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
         {cols?.length &&
           cols.map((col) => (
             <TableCell className={col.collapseParent && open ? 'text-blue-500' : ''} colSpan={1} align="center" key={col.key}>
-              {col.collapseParent && (
+              {col.collapseParent && row?.hasChildren && (
                 <TableCellWithToggleBtn isOpen={open} onToggle={handleToggle} />
               )}
               {col.render

@@ -33,57 +33,68 @@ export default function CommissionPage() {
   const handleSave = () => setEditRowId(null);
 
 
-  const buildNestedArray = (data: ICommission[]): NestedCommission[] => {
+  function buildNestedArray(data: ICommission[]): NestedCommission[] {
     const root: NestedCommission[] = [];
     const idMap: Record<number, NestedCommission> = {};
   
-    data.forEach(item => {
-      idMap[item.id] = {
-        ...item,
-        hasChildren: false,
-        children: []
-      };
+    // Create a map of all items
+    data.forEach((item) => {
+      idMap[item.id] = { ...item, children: [], hasChildren: false };
     });
   
-    data.forEach(item => {
-      if (item.id === item.parent_id) root.push(idMap[item.id]); // Add top-level items to root
-      else if (idMap[item.parent_id]) idMap[item.parent_id].hasChildren = true; // Set the parent item’s `hasChildren` to true
+    // Set the children and hasChildren properties
+    data.forEach((item) => {
+      if (item.id === item.parent_id) {
+        root.push(idMap[item.id]);
+      } else {
+        const parent = idMap[item.parent_id];
+        if (parent) {
+          parent.hasChildren = true; // Mark parent as having children
+        }
+      }
     });
-    
+  
     return root;
   }
 
   const toggleSubCategoryItemsIntoCategoryItem = (row: ICommission): void => {
     const updatedCommissions = [...nestedCommissions];
-
-    // Recursive function to find the target category in the nested structure
+  
+    // Recursive function to find and toggle the target category
     const findAndToggleCategory = (categories: NestedCommission[]): boolean => {
-        for (const category of categories) {
-            if (category.id === row.id) {
-                // If the target category already has children, reset its children to empty
-                if (category.children.length) category.children = []; // Clear out the children
-                else {
-                    // Otherwise, add subcategories to the target category
-                    flatCommissions.forEach(item => {
-                        if (item.parent_id === row.id) category.children.push({ ...item, children: [], hasChildren: false });
-                    });
-                }
-                return true; // Found and updated the category
-            }
-
-            // If not found at this level, search deeper recursively
-            if (category.children.length) {
-                const found = findAndToggleCategory(category.children);
-                if (found) return true;
-            }
+      for (const category of categories) {
+        if (category.id === row.id) {
+          if (category.children.length) {
+            category.children = []; // Clear children
+          } else {
+            // Fetch children dynamically
+            const subCategories = flatCommissions.filter(
+              (item) => item.parent_id === row.id
+            );
+            category.children = subCategories.map((subCategory) => ({
+              ...subCategory,
+              children: [],
+              hasChildren: flatCommissions.some(
+                (item) => item.parent_id === subCategory.id
+              ),
+            }));
+          }
+          return true; // Found and updated
         }
-        return false; // Not found in this branch
+  
+        // Search recursively in child categories
+        if (category.children.length) {
+          const found = findAndToggleCategory(category.children);
+          if (found) return true;
+        }
+      }
+      return false; // Not found in this branch
     };
-    // Start searching and toggling from the top-level categories
+  
+    // Start the recursive search
     findAndToggleCategory(updatedCommissions);
     setNestedCommissions(updatedCommissions);
-};
-
+  };
   const handleSelectionChange = (newSelection: ICommission[]) => {
     setSelectedRows(newSelection);
   };
