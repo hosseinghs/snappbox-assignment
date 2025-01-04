@@ -1,8 +1,8 @@
 import { useState } from "react"
 
 import CustomPopup from "@/components/base/CustomPopup"
-import { Delete } from "@mui/icons-material"
-import { CircularProgress, IconButton } from "@mui/material";
+import CommissionDeletePopupTarget from './CommissionDeletePopupTarget'
+import CommissionDeletePopupContent from "./CommissionDeletePopupContent";
 
 import { deleteCommissionByIdAPI } from "@/services/comissions";
 
@@ -24,16 +24,13 @@ export default function CommissionDeletePopUp ({ id, removeCommissionFromList }:
         }
     }
 
+
     return (
         <CustomPopup 
-            message="Are you sure you want to delete this commission?"
             open={showPopup}
             onClose={closePopup}
-            onConfirm={deleteCommission}
-        >
-            <IconButton onClick={openPopup}>
-                { loading ? <CircularProgress /> : <Delete /> }
-            </IconButton>
-        </CustomPopup>
+            bodyContent={<CommissionDeletePopupContent onCancel={closePopup} onConfirm={deleteCommission} />}
+            targetElement={<CommissionDeletePopupTarget openPopup={openPopup} loading={loading} />}
+        />
     ) 
 }

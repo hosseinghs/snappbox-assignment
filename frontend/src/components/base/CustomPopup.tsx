@@ -1,19 +1,19 @@
-import { useEffect, useRef, useState, CSSProperties } from "react";
+import { useEffect, useRef, useState, CSSProperties, ReactNode } from "react";
 interface IProps {
   open: boolean;
-  message: string;
   onClose: () => void;
-  onConfirm: () => void | Promise<void>;
-  children?: React.ReactNode;
   position?: 'top' | 'bottom';
+  bodyContent: ReactNode;
+  targetElement?: ReactNode;
 }
 
 export default function CustomPopup({
   open,
-  message,
+  // message,
   onClose,
-  children,
-  onConfirm,
+  // onConfirm,
+  bodyContent,
+  targetElement,
   position = "bottom",
 }: IProps) {
   const popupRef = useRef(null);
@@ -66,27 +66,13 @@ export default function CustomPopup({
             className="absolute px-4 py-2 rounded shadow-2xl border-[1px] border-solid bg-white z-50"
             style={popupStyle}
           >
-            <div>
-              <div>{message}</div>
-              <div className="flex justify-center items-center mt-2">
-                <button
-                  className="ml-4 text-red-400 hover:text-red-600 focus:outline-none"
-                  onClick={onClose}
-                >
-                  No
-                </button>
-                <button
-                  className="ml-4 text-red-400 hover:text-red-600 focus:outline-none"
-                  onClick={onConfirm}
-                >
-                  Yes
-                </button>
-              </div>
+            <div id="content">
+              {bodyContent}
             </div>
           </div>
         </>
       )}
-      <div ref={targetRef}>{children}</div>
+      <div ref={targetRef}>{targetElement}</div>
     </>
   );
 }
