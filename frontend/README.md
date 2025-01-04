@@ -168,5 +168,5 @@ Centralized API module with:
 ### Performance Optimization
 - Use proper React hooks
 - Avoid unnecessary re-renders
-- Optimize bundle size
+- Optimize bundle size https://mui.com/material-ui/guides/minimizing-bundle-size/?srsltid=AfmBOop6hOJ0r1SVLs9OiHmEDc8soJCDwQiP0zlmKzPuqQJvj5HpBdZs#bundle-size-matters
 - Use proper key props
