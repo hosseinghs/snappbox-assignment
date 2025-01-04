@@ -73,6 +73,7 @@ export default function BaseTable<T extends { children?: T[] }>({
           columns={columns}
           hasCheckbox={hasCheckbox}
           handleSelectAll={handleSelectAll}
+          actionCellTitle={actions?.length ? 'actions' : '' }
           areAllRowsSelected={areAllRowsSelected}
         />
         <TableBody<T>
