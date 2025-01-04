@@ -92,7 +92,7 @@ export default function TableNestedRow<T extends { children?: T[] }>({
         )}
         {cols?.length &&
           cols.map((col) => (
-            <TableCell className={col.collapseParent && open ? 'text-blue-500' : ''} align="center" key={col.key}>
+            <TableCell className={col.collapseParent && open ? 'text-blue-500' : ''} colSpan={1} align="center" key={col.key}>
               {col.collapseParent && (
                 <TableCellWithToggleBtn isOpen={open} onToggle={handleToggle} />
               )}
@@ -110,9 +110,9 @@ export default function TableNestedRow<T extends { children?: T[] }>({
       </TableRow>
 
       {/* Render nested rows in a scrollable container */}
-      {row.children && (
+      {row.children && row.children.length > 0 && (
         <TableRow>
-          <TableCell colSpan={cols?.length || 3} style={{ paddingBottom: 0, paddingTop: 0 }}>
+          <TableCell id="nested__table" colSpan={12} className="p-0">
             <Collapse in={open} timeout="auto" unmountOnExit>
               <div
                 style={{
