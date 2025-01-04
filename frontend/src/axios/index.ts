@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { unauthorized } from 'next/navigation'
-import { getAccessToken } from "@/cookie";
 import { getGlobalNotifyHandler } from "@/context/notify-context";
+import { removeAccessToken, getAccessToken } from "@/cookie";
 
 // Create an Axios instance
 const apiCaller = axios.create({
@@ -34,7 +34,10 @@ apiCaller.interceptors.response.use(
 
     showError(message);
 
-    if (error.response?.status === 401) unauthorized();
+    if (error.response?.status === 401) {
+      removeAccessToken()
+      unauthorized()
+    }
 
     return Promise.reject(error);
   }
