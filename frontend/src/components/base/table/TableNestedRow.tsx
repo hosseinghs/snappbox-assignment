@@ -6,6 +6,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Box,
 } from "@mui/material";
 import TableLoading from "./TableLoading";
 import TableActionsCell from "./TableActionsCell";
@@ -91,8 +92,8 @@ export default function TableNestedRow<T extends { children?: T[], hasChildren: 
         </TableCell>
       )}
       {cols?.length &&
-        cols.map((col) => (
-          <TableCell className={col.collapseParent && open ? 'text-blue-500' : ''} colSpan={1} align="center" key={col.key}>
+        cols.map((col,i) => (
+          <TableCell className={col.collapseParent && open ? 'text-blue-500' : ''} colSpan={1} align={i? 'center' : 'left'} key={col.key}>
             {col.collapseParent && row?.hasChildren && (
               <TableCellWithToggleBtn isOpen={open} onToggle={handleToggle} />
             )}
@@ -113,7 +114,7 @@ export default function TableNestedRow<T extends { children?: T[], hasChildren: 
       <TableRow className="bg-gray-100">
         <TableCell id="nested__table" colSpan={12} className="p-0">
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <div ref={tableBodyRef} className="overflow-y-auto max-h-[300px]">
+            <Box sx={{ margin: 0 }} ref={tableBodyRef} className="overflow-y-auto max-h-[300px]">
               <Table size="small" aria-label="nested table">
                 <TableBody>
                   {visibleChildren.map((child: T, index: number) => (
@@ -132,7 +133,7 @@ export default function TableNestedRow<T extends { children?: T[], hasChildren: 
                   {loadingMore && <TableLoading />}
                 </TableBody>
               </Table>
-            </div>
+          </Box>
           </Collapse>
         </TableCell>
       </TableRow>

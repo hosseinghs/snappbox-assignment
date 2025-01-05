@@ -121,12 +121,12 @@ export default function CommissionPage() {
   const columns: IColumn<ICommission>[] = [
     {
       key: 'name',
-      label: 'category',
+      label: 'دسته بندی',
       collapseParent: true,
     },
     {
       key: 'commission_normal',
-      label: 'commission',
+      label: 'کمیسیون',
       render: (row) => (
         <CommissionInput
           value={row.commission_normal}
@@ -137,7 +137,7 @@ export default function CommissionPage() {
     },
     {
       key: 'commission_promotion',
-      label: 'promition commission',
+      label: 'ارتقا کمیسیون',
       render: (row) => (
         <CommissionInput
           value={row.commission_promotion}
@@ -151,7 +151,7 @@ export default function CommissionPage() {
   const tableActions: ITableAction<ICommission>[] = [
     {
       key: 'edit',
-      label: 'edit',
+      label: 'ویرایش',
       render: (row: ICommission) => (
         <CommissionEditAction
           row={row}
@@ -163,7 +163,7 @@ export default function CommissionPage() {
     },
     {
       key: 'delete',
-      label: 'delete',
+      label: 'حذف',
       render: (row: ICommission) => <CommissionDeletePopUp id={row.id} removeCommissionFromList={() => removeCommissionFromList(row.id)} />
     }
   ];

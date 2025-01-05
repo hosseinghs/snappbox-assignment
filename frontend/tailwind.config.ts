@@ -10,7 +10,14 @@ export default {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      sans: ['iransans', 'sans-serif']
+    },
+    extend: {
+      fontFamily: {
+        sans: ['iransans']
+      },
+    },
   },
   plugins: [],
 } satisfies Config
