@@ -32,7 +32,7 @@ export default function BaseTable<T extends { children?: T[] }>({
   const allTopLevelRowsSelected = useMemo(() => {
     return rows.every((row) =>
       selectedRowsRef.current.has(row) ||
-      (row.children && row.children.every((child) => selectedRowsRef.current.has(child)))
+      (row.children && row.children?.length > 0 && row.children.every((child) => selectedRowsRef.current.has(child)))
     );
   }, [rows]);
 
