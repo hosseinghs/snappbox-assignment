@@ -76,8 +76,6 @@ export default function CommissionPage() {
     try {
       setLoading(true)
       const { data } = await getAllCommissionsAPI()
-      console.log(data);
-      
       setFlatCommissions(data);
       const nestedArray = buildNestedArray(data)
       setNestedCommissions(nestedArray)
