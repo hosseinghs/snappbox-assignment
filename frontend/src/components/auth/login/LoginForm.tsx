@@ -4,7 +4,7 @@ import { Box, Button, Grid, CircularProgress, TextField } from '@mui/material';
 import { useForm, SubmitHandler } from "react-hook-form"
 
 import { EMAIL_REGEX } from '@/utils/validations';
-import type { ILoginForm } from '@/services/auth/register-request'
+import type { ILoginForm } from '@/services/auth/type'
 
 interface Iprops {
   loading: boolean;

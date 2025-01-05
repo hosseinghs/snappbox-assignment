@@ -1,5 +1,5 @@
 import apiCaller from "@/axios";
-import type { ILogin, IRegisterRequest, IVerifyRequest, ILoginResponse } from './register-request'
+import type { ILogin, IRegisterRequest, IVerifyRequest, ILoginResponse } from './type'
 
 const BASE_SCOPE_URL = '/auth' as const
 

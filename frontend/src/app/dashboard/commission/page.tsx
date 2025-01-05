@@ -2,19 +2,15 @@
 import { lazy, useState, useEffect, useCallback } from 'react';
 
 import BaseTable from '@/components/base/table'
+import buildNestedArray from '@/utils/buildNestedArrays';
 import { getAllCommissionsAPI } from '@/services/comissions';
-import type { ICommission } from '@/services/comissions/type';
 import type { IColumn, ITableAction } from '@/components/base/table/type';
+import type { ICommission, NestedCommission } from '@/services/comissions/type';
 
 import CommissionInput from '@/components/commission/CommissionInput';
 import CommissionEditAction from '@/components/commission/CommissionEditAction';
 import CommissionDeletePopUp from '@/components/commission/CommissionDeletePopup';
 const CommissionCreateDialog = lazy(() => import('@/components/commission/CommissionCreateDialog'))
-
-type NestedCommission = ICommission & {
-  children: ICommission[];
-  hasChildren: boolean;
-}
 
 interface IUpdateCommission {
   id: number;
@@ -32,31 +28,6 @@ export default function CommissionPage() {
 
   const handleEdit = (rowId: number) => setEditRowId(rowId);
   const handleSave = () => setEditRowId(null);
-
-
-  function buildNestedArray(data: ICommission[]): NestedCommission[] {
-    const root: NestedCommission[] = [];
-    const idMap: Record<number, NestedCommission> = {};
-  
-    // Create a map of all items
-    data.forEach((item) => {
-      idMap[item.id] = { ...item, children: [], hasChildren: false };
-    });
-  
-    // Set the children and hasChildren properties
-    data.forEach((item) => {
-      if (item.id === item.parent_id) {
-        root.push(idMap[item.id]);
-      } else {
-        const parent = idMap[item.parent_id];
-        if (parent) {
-          parent.hasChildren = true; // Mark parent as having children
-        }
-      }
-    });
-  
-    return root;
-  }
 
   const toggleSubCategoryItemsIntoCategoryItem = (row: ICommission): void => {
     const updatedCommissions = [...nestedCommissions];
@@ -105,6 +76,8 @@ export default function CommissionPage() {
     try {
       setLoading(true)
       const { data } = await getAllCommissionsAPI()
+      console.log(data);
+      
       setFlatCommissions(data);
       const nestedArray = buildNestedArray(data)
       setNestedCommissions(nestedArray)

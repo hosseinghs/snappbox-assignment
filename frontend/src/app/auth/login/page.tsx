@@ -5,7 +5,7 @@ import { useState, useContext } from 'react';
 import AuthContext from "@/context/auth-context";
 import { loginAPI } from '@/services/auth';
 import { setAccessToken } from '@/cookie';
-import type { ILoginForm } from '@/services/auth/register-request'
+import type { ILoginForm } from '@/services/auth/type'
 
 export default function Login() {
     const ctx = useContext(AuthContext);

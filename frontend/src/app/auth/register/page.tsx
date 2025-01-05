@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 
 import { useForm, SubmitHandler } from "react-hook-form"
 import { sendUserInfoAPI, resendOTPCodeAPI, verifyOTPCodeAPI } from '@/services/auth'
-import type { IRegisterRequest } from '@/services/auth/register-request'
+import type { IRegisterRequest } from '@/services/auth/type'
 
 const FirstStepRegister = dynamic(() => import('@/components/auth/register/RegisterForm')) 
 const SecondStepRegister = dynamic(() => import('@/components/auth/register/VerifyOTP')) 
