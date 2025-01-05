@@ -16,7 +16,7 @@ export default function CommissionDeletePopUp ({ id, removeCommissionFromList }:
     const deleteCommission = async () => {
         try {
             setLoading(true)
-            // await deleteCommissionByIdAPI(id)
+            await deleteCommissionByIdAPI(id)
             removeCommissionFromList(id)
         } finally {
             setLoading(false)

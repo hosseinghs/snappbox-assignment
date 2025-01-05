@@ -77,7 +77,7 @@ export default function CommissionPage() {
       setLoading(true)
       const { data } = await getAllCommissionsAPI()
       setFlatCommissions(data);
-      const nestedArray = buildNestedArray(data)
+      const nestedArray = buildNestedArray(data)      
       setNestedCommissions(nestedArray)
     } finally {
       setLoading(false)
@@ -95,6 +95,24 @@ export default function CommissionPage() {
     } 
     setNestedCommissions(updatedCommissions);
   }
+
+  const removeCommissionFromList = (id: number) => {
+    const updatedFlatCommissions = flatCommissions.filter((item) => item.id !== id);
+    setFlatCommissions(updatedFlatCommissions);
+  
+    const removeFromNested = (items: NestedCommission[]): NestedCommission[] => {
+      return items
+        .filter((item) => item.id !== id)
+        .map((item) => ({
+          ...item,
+          children: removeFromNested(item.children),
+        }));
+    };
+  
+    const updatedNestedCommissions = removeFromNested(nestedCommissions);
+    setNestedCommissions(updatedNestedCommissions);
+  };
+  
 
 
   useEffect(() => {
@@ -147,7 +165,7 @@ export default function CommissionPage() {
     {
       key: 'delete',
       label: 'delete',
-      render: (row: ICommission) => <CommissionDeletePopUp id={row.id} removeCommissionFromList={() => {}} />
+      render: (row: ICommission) => <CommissionDeletePopUp id={row.id} removeCommissionFromList={() => removeCommissionFromList(row.id)} />
     }
   ]
 
