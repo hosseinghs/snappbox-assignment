@@ -7,3 +7,8 @@ export interface ICommission {
     commission_normal_new: number;
     commission_promotion_new: number;
 }
+
+export type NestedCommission = ICommission & {
+    children: NestedCommission[];
+    hasChildren: boolean;
+  }
