@@ -1,5 +1,6 @@
 'use client'
-import { lazy, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 
 import BaseTable from '@/components/base/table'
 import buildNestedArray from '@/utils/buildNestedArrays';
@@ -10,7 +11,11 @@ import type { ICommission, NestedCommission } from '@/services/comissions/type';
 import CommissionInput from '@/components/commission/CommissionInput';
 import CommissionEditAction from '@/components/commission/CommissionEditAction';
 import CommissionDeletePopUp from '@/components/commission/CommissionDeletePopup';
-const CommissionCreateDialog = lazy(() => import('@/components/commission/CommissionCreateDialog'))
+
+// Dynamically import CommissionCreateDialog and disable SSR
+const CommissionCreateDialog = dynamic(() => import('@/components/commission/CommissionCreateDialog'), { 
+  ssr: false 
+});
 
 interface IUpdateCommission {
   id: number;
@@ -20,26 +25,24 @@ interface IUpdateCommission {
 }
 
 export default function CommissionPage() {
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
   const [editRowId, setEditRowId] = useState<number | null>(null);
   const [selectedRows, setSelectedRows] = useState<ICommission[]>([]);
-  const [flatCommissions, setFlatCommissions] = useState<ICommission[]>([])
-  const [nestedCommissions, setNestedCommissions] = useState<NestedCommission[]>([])
+  const [flatCommissions, setFlatCommissions] = useState<ICommission[]>([]);
+  const [nestedCommissions, setNestedCommissions] = useState<NestedCommission[]>([]);
 
   const handleEdit = (rowId: number) => setEditRowId(rowId);
   const handleSave = () => setEditRowId(null);
 
   const toggleSubCategoryItemsIntoCategoryItem = (row: ICommission): void => {
     const updatedCommissions = [...nestedCommissions];
-  
-    // Recursive function to find and toggle the target category
+
     const findAndToggleCategory = (categories: NestedCommission[]): boolean => {
       for (const category of categories) {
         if (category.id === row.id) {
           if (category.children.length) {
             category.children = []; // Clear children
           } else {
-            // Fetch children dynamically
             const subCategories = flatCommissions.filter(
               (item) => item.parent_id === row.id
             );
@@ -53,8 +56,7 @@ export default function CommissionPage() {
           }
           return true; // Found and updated
         }
-  
-        // Search recursively in child categories
+
         if (category.children.length) {
           const found = findAndToggleCategory(category.children);
           if (found) return true;
@@ -62,8 +64,7 @@ export default function CommissionPage() {
       }
       return false; // Not found in this branch
     };
-  
-    // Start the recursive search
+
     findAndToggleCategory(updatedCommissions);
     setNestedCommissions(updatedCommissions);
   };
@@ -74,32 +75,32 @@ export default function CommissionPage() {
 
   const handleGetCommissionsList = async () => {
     try {
-      setLoading(true)
-      const { data } = await getAllCommissionsAPI()
+      setLoading(true);
+      const { data } = await getAllCommissionsAPI();
       setFlatCommissions(data);
-      const nestedArray = buildNestedArray(data)      
-      setNestedCommissions(nestedArray)
+      const nestedArray = buildNestedArray(data);
+      setNestedCommissions(nestedArray);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const setNewCommissionValue = ({ value, parentId, id, key }: IUpdateCommission) => {
     const updatedCommissions = [...nestedCommissions];
     const category = updatedCommissions.find(item => item.id === parentId);
 
-    if (category && category.id === id) category[key] = +value
+    if (category && category.id === id) category[key] = +value;
     else if (category?.children) {
       const subCategory = category.children.find(item => item.id === id);
-      if (subCategory) subCategory[key] = +value
+      if (subCategory) subCategory[key] = +value;
     } 
     setNestedCommissions(updatedCommissions);
-  }
+  };
 
   const removeCommissionFromList = (id: number) => {
     const updatedFlatCommissions = flatCommissions.filter((item) => item.id !== id);
     setFlatCommissions(updatedFlatCommissions);
-  
+
     const removeFromNested = (items: NestedCommission[]): NestedCommission[] => {
       return items
         .filter((item) => item.id !== id)
@@ -108,16 +109,14 @@ export default function CommissionPage() {
           children: removeFromNested(item.children),
         }));
     };
-  
+
     const updatedNestedCommissions = removeFromNested(nestedCommissions);
     setNestedCommissions(updatedNestedCommissions);
   };
-  
-
 
   useEffect(() => {
-    handleGetCommissionsList()
-  }, [])
+    handleGetCommissionsList();
+  }, []);
 
   const columns: IColumn<ICommission>[] = [
     {
@@ -147,7 +146,7 @@ export default function CommissionPage() {
         />
       ),
     },
-  ]
+  ];
 
   const tableActions: ITableAction<ICommission>[] = [
     {
@@ -167,22 +166,22 @@ export default function CommissionPage() {
       label: 'delete',
       render: (row: ICommission) => <CommissionDeletePopUp id={row.id} removeCommissionFromList={() => removeCommissionFromList(row.id)} />
     }
-  ]
+  ];
 
   return (
     <div>
-        <div className='w-3/4 mx-auto'>
-              <CommissionCreateDialog />
-              <BaseTable<NestedCommission>
-                hasCheckbox
-                rows={nestedCommissions} 
-                loading={loading}
-                columns={columns}
-                actions={tableActions}
-                onSelectionChange={handleSelectionChange}
-                addOrRemoveSubCategory={(d) => toggleSubCategoryItemsIntoCategoryItem(d)}
-              />
-          </div>
+      <div className='w-3/4 mx-auto'>
+        <CommissionCreateDialog />
+        <BaseTable<NestedCommission>
+          hasCheckbox
+          rows={nestedCommissions} 
+          loading={loading}
+          columns={columns}
+          actions={tableActions}
+          onSelectionChange={handleSelectionChange}
+          addOrRemoveSubCategory={(d) => toggleSubCategoryItemsIntoCategoryItem(d)}
+        />
+      </div>
     </div>
   );
 }
