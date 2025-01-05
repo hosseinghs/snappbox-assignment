@@ -171,7 +171,9 @@ export default function CommissionPage() {
   return (
     <div>
       <div className='w-3/4 mx-auto'>
-        <CommissionCreateDialog />
+        <div className='text-end'>
+          <CommissionCreateDialog />
+        </div>
         <BaseTable<NestedCommission>
           hasCheckbox
           rows={nestedCommissions} 

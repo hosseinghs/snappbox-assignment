@@ -16,15 +16,15 @@ export default function Nav() {
         router.push('/auth/login')
     }
 
-    const loggedInComponent = () => <Button className='w-auto' variant="text" color='warning' onClick={() => logout()}>Logout</Button>
+    const loggedInComponent = () => <Button className='w-auto' variant="text" color='warning' onClick={() => logout()}>خروج</Button>
     const notLoggedInComponent = () => {
         return (
             <>
             <Button variant='contained' color='primary' className='w-auto'>
-                <Link href="/auth/login">Login</Link>
+                <Link href="/auth/login">ورود</Link>
             </Button>
             <Button variant='outlined' color='primary' className='w-auto ml-4'>
-                <Link href="/auth/register">Register</Link>
+                <Link href="/auth/register">ثبت نام</Link>
             </Button>
             </>
         )
